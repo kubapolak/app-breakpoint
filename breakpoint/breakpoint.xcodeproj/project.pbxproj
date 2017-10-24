@@ -15,6 +15,7 @@
 		0450CFD61F93B6A700C4ECAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFD41F93B6A700C4ECAB /* LaunchScreen.storyboard */; };
 		04669BA11F9676E000BCC92B /* MeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04669BA01F9676E000BCC92B /* MeVC.swift */; };
 		049576A41F9F7E30009C6A1D /* CreatePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049576A31F9F7E30009C6A1D /* CreatePostVC.swift */; };
+		049576A61F9F84A5009C6A1D /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049576A51F9F84A5009C6A1D /* UIViewExt.swift */; };
 		04A6AD171F96513E00EB6FFE /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A6AD161F96513E00EB6FFE /* AuthService.swift */; };
 		04ADAA301F93BDAB00FDEA1B /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ADAA2F1F93BDAB00FDEA1B /* DataService.swift */; };
 		04ADAA321F93CA1D00FDEA1B /* AuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04ADAA311F93CA1D00FDEA1B /* AuthVC.swift */; };
@@ -38,6 +39,7 @@
 		0450CFE21F93B8D200C4ECAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04669BA01F9676E000BCC92B /* MeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeVC.swift; sourceTree = "<group>"; };
 		049576A31F9F7E30009C6A1D /* CreatePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostVC.swift; sourceTree = "<group>"; };
+		049576A51F9F84A5009C6A1D /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
 		04A6AD161F96513E00EB6FFE /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		04ADAA2F1F93BDAB00FDEA1B /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		04ADAA311F93CA1D00FDEA1B /* AuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthVC.swift; sourceTree = "<group>"; };
@@ -138,6 +140,7 @@
 		0450CFE01F93B72600C4ECAB /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				049576A51F9F84A5009C6A1D /* UIViewExt.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049576A61F9F84A5009C6A1D /* UIViewExt.swift in Sources */,
 				04669BA11F9676E000BCC92B /* MeVC.swift in Sources */,
 				04ADAA321F93CA1D00FDEA1B /* AuthVC.swift in Sources */,
 				0450CFCE1F93B6A700C4ECAB /* GroupsVC.swift in Sources */,
