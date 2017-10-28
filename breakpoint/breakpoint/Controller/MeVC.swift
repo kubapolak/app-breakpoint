@@ -17,6 +17,8 @@ class MeVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var statusLabel: UILabel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,14 @@ class MeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
+        setupStatusLabel()
+        
+    }
+    
+    func setupStatusLabel() {
+        DataService.instance.getUserStatus(forUser: Auth.auth().currentUser!) { (userStatus) in
+            self.statusLabel.text = userStatus
+        }
     }
     
     @IBAction func signOutButtonPressed(_ sender: Any) {
@@ -40,6 +50,11 @@ class MeVC: UIViewController {
         }
         logoutPopup.addAction(logoutAction)
         present(logoutPopup, animated: true, completion: nil)
+    }
+    
+    @IBAction func setStatusButtonPressed(_ sender: Any) {
+        let updateUserStatusVC = UpdateUserStatusVC()
+        present(updateUserStatusVC, animated: true, completion: nil)
     }
     
 }

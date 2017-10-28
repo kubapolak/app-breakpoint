@@ -39,6 +39,11 @@ class DataService {
         REF_USERS.child(uid).updateChildValues(userData)
     }
     
+    func updateUserStatus(userStatus: String, handler: @escaping (_ statusUpdated: Bool) -> ()) {
+        REF_USERS.child((Auth.auth().currentUser?.uid)!).updateChildValues(["status": userStatus])
+        handler(true)
+    }
+    
     func getUsername(forUID uid: String, handler: @escaping (_ username: String) -> ()) {
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
             guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -132,6 +137,23 @@ class DataService {
                 }
             }
             handler(emailArray)
+        }
+    }
+    
+    func getUserStatus(forUser currentUser: User, handler: @escaping (_ userStatus: String) -> ()) {
+        var userStatus = String()
+        REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
+            guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
+            for user in userSnapshot {
+                if user.key == currentUser.uid {
+                    if let newStatus = user.childSnapshot(forPath: "status").value as? String {
+                        userStatus = newStatus
+                    } else {
+                        userStatus = ""
+                    }
+                }
+            }
+            handler(userStatus)
         }
     }
     

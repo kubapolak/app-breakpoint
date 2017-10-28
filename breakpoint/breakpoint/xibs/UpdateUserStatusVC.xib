@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Menlo.ttc">
+            <string>Menlo-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UpdateUserStatusVC" customModule="breakpoint" customModuleProvider="target">
+            <connections>
+                <outlet property="bgView" destination="NU7-cl-pTx" id="M7d-A7-s6Z"/>
+                <outlet property="statusSwitch" destination="EvM-aB-RPR" id="hip-oD-Zfm"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view clearsContextBeforeDrawing="NO" alpha="0.34999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NU7-cl-pTx" userLabel="bgView">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="778"/>
+                    <color key="backgroundColor" red="0.25490196079999999" green="0.27058823529999998" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H88-YS-L3c">
+                    <rect key="frame" x="37" y="226" width="300" height="200"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="45" translatesAutoresizingMaskIntoConstraints="NO" id="o7z-fp-zKB">
+                            <rect key="frame" x="71.666666666666671" y="19.333333333333343" width="156.66666666666663" height="161.33333333333334"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="how advanced are you" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eMa-od-vby">
+                                    <rect key="frame" x="0.0" y="0.0" width="156.66666666666666" height="15.333333333333334"/>
+                                    <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="13"/>
+                                    <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="0.74834118149999995" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="EvM-aB-RPR">
+                                    <rect key="frame" x="24.999999999999986" y="60.333333333333343" width="107.00000000000001" height="29"/>
+                                    <segments>
+                                        <segment title="casual"/>
+                                        <segment title="nerd"/>
+                                    </segments>
+                                    <color key="tintColor" red="0.86012848980000001" green="0.032193786029999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </segmentedControl>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="obc-Ec-hPZ">
+                                    <rect key="frame" x="43.333333333333329" y="133.33333333333334" width="70" height="28"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="70" id="YPh-LV-j23"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="13"/>
+                                    <state key="normal" title="confirm">
+                                        <color key="titleColor" red="1" green="0.2747408865" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="confirmButtonTapped:" destination="-1" eventType="touchUpInside" id="r1b-ip-xML"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.25490196079999999" green="0.27058823529999998" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="NBr-qq-ilW"/>
+                        <constraint firstItem="o7z-fp-zKB" firstAttribute="centerY" secondItem="H88-YS-L3c" secondAttribute="centerY" id="Oqp-PO-6f6"/>
+                        <constraint firstItem="o7z-fp-zKB" firstAttribute="centerX" secondItem="H88-YS-L3c" secondAttribute="centerX" id="gG4-s0-aSb"/>
+                        <constraint firstAttribute="width" constant="300" id="pjJ-ex-uWR"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="NU7-cl-pTx" secondAttribute="trailing" id="2Jo-cp-Vjy"/>
+                <constraint firstItem="NU7-cl-pTx" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Dvf-6v-GKi"/>
+                <constraint firstItem="H88-YS-L3c" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="S7t-Kg-oGW"/>
+                <constraint firstItem="H88-YS-L3c" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-80" id="aU0-js-5rd"/>
+                <constraint firstItem="NU7-cl-pTx" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="jCW-91-ms1"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="NU7-cl-pTx" secondAttribute="bottom" id="kAz-K4-g1h"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="24.5" y="52"/>
+        </view>
+    </objects>
+</document>

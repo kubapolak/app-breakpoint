@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		042FBBD61FA4E4E50032A9EE /* UIViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FBBD51FA4E4E50032A9EE /* UIViewControllerExt.swift */; };
+		042FBBD91FA4EB510032A9EE /* UpdateUserStatusVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FBBD71FA4EB510032A9EE /* UpdateUserStatusVC.swift */; };
+		042FBBDA1FA4EB510032A9EE /* UpdateUserStatusVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 042FBBD81FA4EB510032A9EE /* UpdateUserStatusVC.xib */; };
 		0450CFCA1F93B6A700C4ECAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFC91F93B6A700C4ECAB /* AppDelegate.swift */; };
 		0450CFCC1F93B6A700C4ECAB /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFCB1F93B6A700C4ECAB /* FeedVC.swift */; };
 		0450CFCE1F93B6A700C4ECAB /* GroupsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFCD1F93B6A700C4ECAB /* GroupsVC.swift */; };
@@ -38,6 +40,8 @@
 
 /* Begin PBXFileReference section */
 		042FBBD51FA4E4E50032A9EE /* UIViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExt.swift; sourceTree = "<group>"; };
+		042FBBD71FA4EB510032A9EE /* UpdateUserStatusVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUserStatusVC.swift; sourceTree = "<group>"; };
+		042FBBD81FA4EB510032A9EE /* UpdateUserStatusVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UpdateUserStatusVC.xib; sourceTree = "<group>"; };
 		0450CFC61F93B6A700C4ECAB /* breakpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = breakpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0450CFC91F93B6A700C4ECAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0450CFCB1F93B6A700C4ECAB /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
@@ -90,6 +94,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		042FBBDB1FA4EB580032A9EE /* xibs */ = {
+			isa = PBXGroup;
+			children = (
+				042FBBD81FA4EB510032A9EE /* UpdateUserStatusVC.xib */,
+			);
+			path = xibs;
+			sourceTree = "<group>";
+		};
 		0450CFBD1F93B6A700C4ECAB = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +123,7 @@
 		0450CFC81F93B6A700C4ECAB /* breakpoint */ = {
 			isa = PBXGroup;
 			children = (
+				042FBBDB1FA4EB580032A9EE /* xibs */,
 				0450CFE11F93B75E00C4ECAB /* Services */,
 				0450CFE01F93B72600C4ECAB /* Extensions */,
 				0450CFDF1F93B70A00C4ECAB /* Model */,
@@ -137,6 +150,7 @@
 				049576A31F9F7E30009C6A1D /* CreatePostVC.swift */,
 				049576AB1F9FA835009C6A1D /* CreateGroupsVC.swift */,
 				04B57DAF1FA39A8700C5DCE3 /* GroupFeedVC.swift */,
+				042FBBD71FA4EB510032A9EE /* UpdateUserStatusVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -251,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				042FBBDA1FA4EB510032A9EE /* UpdateUserStatusVC.xib in Resources */,
 				0450CFD61F93B6A700C4ECAB /* LaunchScreen.storyboard in Resources */,
 				04C3735A1F96639700872C66 /* GoogleService-Info.plist in Resources */,
 				0450CFD31F93B6A700C4ECAB /* Assets.xcassets in Resources */,
@@ -344,6 +359,7 @@
 				04ADAA381F93CDEF00FDEA1B /* ShadowView.swift in Sources */,
 				049576A41F9F7E30009C6A1D /* CreatePostVC.swift in Sources */,
 				0450CFCC1F93B6A700C4ECAB /* FeedVC.swift in Sources */,
+				042FBBD91FA4EB510032A9EE /* UpdateUserStatusVC.swift in Sources */,
 				04ADAA361F93CAB000FDEA1B /* InsetTextField.swift in Sources */,
 				04ADAA301F93BDAB00FDEA1B /* DataService.swift in Sources */,
 				049576AA1F9F91FF009C6A1D /* Message.swift in Sources */,
