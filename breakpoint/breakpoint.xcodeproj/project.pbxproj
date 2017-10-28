@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		042FBBD61FA4E4E50032A9EE /* UIViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042FBBD51FA4E4E50032A9EE /* UIViewControllerExt.swift */; };
 		0450CFCA1F93B6A700C4ECAB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFC91F93B6A700C4ECAB /* AppDelegate.swift */; };
 		0450CFCC1F93B6A700C4ECAB /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFCB1F93B6A700C4ECAB /* FeedVC.swift */; };
 		0450CFCE1F93B6A700C4ECAB /* GroupsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0450CFCD1F93B6A700C4ECAB /* GroupsVC.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		042FBBD51FA4E4E50032A9EE /* UIViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExt.swift; sourceTree = "<group>"; };
 		0450CFC61F93B6A700C4ECAB /* breakpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = breakpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0450CFC91F93B6A700C4ECAB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0450CFCB1F93B6A700C4ECAB /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				049576A51F9F84A5009C6A1D /* UIViewExt.swift */,
+				042FBBD51FA4E4E50032A9EE /* UIViewControllerExt.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				04669BA11F9676E000BCC92B /* MeVC.swift in Sources */,
 				04B57DAA1FA38C9F00C5DCE3 /* GroupCell.swift in Sources */,
 				04ADAA321F93CA1D00FDEA1B /* AuthVC.swift in Sources */,
+				042FBBD61FA4E4E50032A9EE /* UIViewControllerExt.swift in Sources */,
 				0450CFCE1F93B6A700C4ECAB /* GroupsVC.swift in Sources */,
 				04B57DB01FA39A8700C5DCE3 /* GroupFeedVC.swift in Sources */,
 				04B57DAE1FA39A0900C5DCE3 /* GroupFeedCell.swift in Sources */,
