@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class UpdateUserStatusVC: UIViewController {
 
@@ -21,7 +22,16 @@ class UpdateUserStatusVC: UIViewController {
     
     func setupView() {
         
-        statusSwitch.selectedSegmentIndex = 0
+        DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
+            
+            if userStatus == "casual" {
+            self.statusSwitch.selectedSegmentIndex = 0
+            } else if userStatus == "nerd" {
+            self.statusSwitch.selectedSegmentIndex = 1
+            } else {
+                self.statusSwitch.selectedSegmentIndex = 0
+            }
+        }
         
         let closeTouch = UITapGestureRecognizer(target: self, action: #selector(UpdateUserStatusVC.closeTap(_:)))
         bgView.addGestureRecognizer(closeTouch)
@@ -41,11 +51,11 @@ class UpdateUserStatusVC: UIViewController {
         }
         DataService.instance.updateUserStatus(userStatus: updatedStatus) { (updated) in
             if updated {
+                NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)
                 self.dismiss(animated: true, completion: nil)
             } else {
                 print("couldn't update the user's status")
             }
         }
     }
-    
 }

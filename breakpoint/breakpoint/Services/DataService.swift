@@ -140,12 +140,12 @@ class DataService {
         }
     }
     
-    func getUserStatus(forUser currentUser: User, handler: @escaping (_ userStatus: String) -> ()) {
+    func getUserStatus(forUser currentUserUid: String, handler: @escaping (_ userStatus: String) -> ()) {
         var userStatus = String()
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
             guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
             for user in userSnapshot {
-                if user.key == currentUser.uid {
+                if user.key == currentUserUid {
                     if let newStatus = user.childSnapshot(forPath: "status").value as? String {
                         userStatus = newStatus
                     } else {

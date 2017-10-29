@@ -19,21 +19,35 @@ class MeVC: UIViewController {
     
     @IBOutlet weak var statusLabel: UILabel!
     
+    @IBOutlet weak var setStatusButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
         setupStatusLabel()
-        
+    }
+    
+    @objc func userStatusDidChange(_ notif: Notification) {
+        setupStatusLabel()
     }
     
     func setupStatusLabel() {
-        DataService.instance.getUserStatus(forUser: Auth.auth().currentUser!) { (userStatus) in
+        DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
             self.statusLabel.text = userStatus
+            self.setupButtonText()
+        }
+    }
+    
+    func setupButtonText() {
+        if self.statusLabel.text == "" {
+            setStatusButton.setTitle("set status", for: .normal)
+        } else {
+            setStatusButton.setTitle("change status", for: .normal)
         }
     }
     
@@ -54,6 +68,7 @@ class MeVC: UIViewController {
     
     @IBAction func setStatusButtonPressed(_ sender: Any) {
         let updateUserStatusVC = UpdateUserStatusVC()
+        updateUserStatusVC.modalPresentationStyle = .custom
         present(updateUserStatusVC, animated: true, completion: nil)
     }
     

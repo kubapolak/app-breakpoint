@@ -16,10 +16,16 @@ class FeedCell: UITableViewCell {
     
     @IBOutlet weak var contentLabel: UILabel!
     
+    @IBOutlet weak var statusLabel: UILabel!
     
-    func configureCell(profileImage: UIImage, email: String, content: String) {
+    func configureCell(profileImage: UIImage, email: String, content: String, status: String) {
         self.profileImg.image = profileImage
         self.emailLbl.text = email
         self.contentLabel.text = content
+        if status != "" {
+        self.statusLabel.text = "-\(status)"
+        } else {
+            self.statusLabel.text = ""
+        }
     }
 }
