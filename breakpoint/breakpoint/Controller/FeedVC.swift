@@ -25,6 +25,10 @@ class FeedVC: UIViewController {
         DataService.instance.getAllFeedMessages { (returnedMessagesArray) in
             self.messageArray = returnedMessagesArray.reversed()
             self.tableView.reloadData()
+            
+            if self.messageArray.count > 0 {
+                self.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
+            }
         }
     }
 }

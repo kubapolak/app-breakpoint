@@ -18,6 +18,8 @@
 		0450CFD61F93B6A700C4ECAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFD41F93B6A700C4ECAB /* LaunchScreen.storyboard */; };
 		04669BA11F9676E000BCC92B /* MeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04669BA01F9676E000BCC92B /* MeVC.swift */; };
 		048595B91FA633570034908A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048595B81FA633570034908A /* Constants.swift */; };
+		048595BC1FA64AF30034908A /* AddPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048595BA1FA64AF30034908A /* AddPhotoVC.swift */; };
+		048595BD1FA64AF30034908A /* AddPhotoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 048595BB1FA64AF30034908A /* AddPhotoVC.xib */; };
 		049576A41F9F7E30009C6A1D /* CreatePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049576A31F9F7E30009C6A1D /* CreatePostVC.swift */; };
 		049576A61F9F84A5009C6A1D /* UIViewExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049576A51F9F84A5009C6A1D /* UIViewExt.swift */; };
 		049576A81F9F8DC9009C6A1D /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049576A71F9F8DC9009C6A1D /* FeedCell.swift */; };
@@ -54,6 +56,8 @@
 		0450CFE21F93B8D200C4ECAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04669BA01F9676E000BCC92B /* MeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeVC.swift; sourceTree = "<group>"; };
 		048595B81FA633570034908A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		048595BA1FA64AF30034908A /* AddPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoVC.swift; sourceTree = "<group>"; };
+		048595BB1FA64AF30034908A /* AddPhotoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddPhotoVC.xib; sourceTree = "<group>"; };
 		049576A31F9F7E30009C6A1D /* CreatePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostVC.swift; sourceTree = "<group>"; };
 		049576A51F9F84A5009C6A1D /* UIViewExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExt.swift; sourceTree = "<group>"; };
 		049576A71F9F8DC9009C6A1D /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				042FBBD81FA4EB510032A9EE /* UpdateUserStatusVC.xib */,
+				048595BB1FA64AF30034908A /* AddPhotoVC.xib */,
 			);
 			path = xibs;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 				049576AB1F9FA835009C6A1D /* CreateGroupsVC.swift */,
 				04B57DAF1FA39A8700C5DCE3 /* GroupFeedVC.swift */,
 				042FBBD71FA4EB510032A9EE /* UpdateUserStatusVC.swift */,
+				048595BA1FA64AF30034908A /* AddPhotoVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -281,6 +287,7 @@
 				04C3735A1F96639700872C66 /* GoogleService-Info.plist in Resources */,
 				0450CFD31F93B6A700C4ECAB /* Assets.xcassets in Resources */,
 				04C3735B1F9663A500872C66 /* Info.plist in Resources */,
+				048595BD1FA64AF30034908A /* AddPhotoVC.xib in Resources */,
 				0450CFD11F93B6A700C4ECAB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,6 +366,7 @@
 				04ADAA321F93CA1D00FDEA1B /* AuthVC.swift in Sources */,
 				042FBBD61FA4E4E50032A9EE /* UIViewControllerExt.swift in Sources */,
 				048595B91FA633570034908A /* Constants.swift in Sources */,
+				048595BC1FA64AF30034908A /* AddPhotoVC.swift in Sources */,
 				0450CFCE1F93B6A700C4ECAB /* GroupsVC.swift in Sources */,
 				04B57DB01FA39A8700C5DCE3 /* GroupFeedVC.swift in Sources */,
 				04B57DAE1FA39A0900C5DCE3 /* GroupFeedCell.swift in Sources */,

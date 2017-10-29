@@ -72,4 +72,10 @@ class MeVC: UIViewController {
         present(updateUserStatusVC, animated: true, completion: nil)
     }
     
+    @IBAction func photoButtonPressed(_ sender: Any) {
+        let addPhotoVC = AddPhotoVC()
+        addPhotoVC.modalPresentationStyle = .custom
+        present(addPhotoVC, animated: true, completion: nil)
+    }
+    
 }
