@@ -51,7 +51,7 @@
                                         <constraint firstAttribute="height" constant="80" id="s1J-zA-Kjy"/>
                                     </constraints>
                                 </imageView>
-                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.29999999999999999" translatesAutoresizingMaskIntoConstraints="NO" id="g6B-FR-Pgt">
+                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="g6B-FR-Pgt">
                                     <rect key="frame" x="0.0" y="131.33333333333331" width="150" height="2"/>
                                     <color key="progressTintColor" red="1" green="0.2747408865" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="trackTintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="0.74834118149999995" colorSpace="custom" customColorSpace="sRGB"/>

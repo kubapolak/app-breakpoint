@@ -140,12 +140,12 @@ class DataService {
         }
     }
     
-    func getUserStatus(forUser currentUserUid: String, handler: @escaping (_ userStatus: String) -> ()) {
+    func getUserStatus(forUser userUid: String, handler: @escaping (_ userStatus: String) -> ()) {
         var userStatus = String()
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
             guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
             for user in userSnapshot {
-                if user.key == currentUserUid {
+                if user.key == userUid {
                     if let newStatus = user.childSnapshot(forPath: "status").value as? String {
                         userStatus = newStatus
                     } else {
@@ -154,6 +154,21 @@ class DataService {
                 }
             }
             handler(userStatus)
+        }
+    }
+    
+    func downloadUserAvatar(userID: String, handler: @escaping (_ image: UIImage) -> ()) {
+        let storageRef = Storage.storage().reference(withPath: "userAvatars/\(userID).jpg")
+        storageRef.downloadURL { (url, error) in
+            if error != nil {
+                print("error while downloading image url: \(String(describing: error?.localizedDescription))")
+                handler(UIImage(named: "defaultProfileImage")!)
+            } else {
+                print("success!!! image downloaded")
+                let avatarData = NSData(contentsOf: url!)
+                let avatarIMG = UIImage(data: avatarData! as Data)
+                handler(avatarIMG!)
+            }
         }
     }
     

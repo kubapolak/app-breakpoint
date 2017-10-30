@@ -29,17 +29,21 @@ class MeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
-        setupStatusLabel()
+        setupView()
+        
     }
     
     @objc func userStatusDidChange(_ notif: Notification) {
-        setupStatusLabel()
+        setupView()
     }
     
-    func setupStatusLabel() {
+    func setupView() {
         DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
             self.statusLabel.text = userStatus
             self.setupButtonText()
+        }
+        DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (avatar) in
+            self.profileImage.image = avatar
         }
     }
     
