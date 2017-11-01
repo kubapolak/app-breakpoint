@@ -29,6 +29,7 @@ class CreatePostVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLabel.text = Auth.auth().currentUser?.email
+        profileImage.image = AuthService.avatar
     }
     
     

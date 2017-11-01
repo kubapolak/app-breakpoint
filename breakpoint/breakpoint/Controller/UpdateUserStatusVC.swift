@@ -49,6 +49,7 @@ class UpdateUserStatusVC: UIViewController {
         } else if statusSwitch.selectedSegmentIndex == 1 {
             updatedStatus = "nerd"
         }
+        AuthService.status = updatedStatus
         DataService.instance.updateUserStatus(userStatus: updatedStatus) { (updated) in
             if updated {
                 NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)

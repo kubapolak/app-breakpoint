@@ -164,7 +164,6 @@ class DataService {
                 print("error while downloading image url: \(String(describing: error?.localizedDescription))")
                 handler(UIImage(named: "defaultProfileImage")!)
             } else {
-                print("success!!! image downloaded")
                 let avatarData = NSData(contentsOf: url!)
                 let avatarIMG = UIImage(data: avatarData! as Data)
                 handler(avatarIMG!)

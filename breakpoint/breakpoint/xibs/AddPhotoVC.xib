@@ -18,7 +18,8 @@
             <connections>
                 <outlet property="bgView" destination="HJd-ZN-UgQ" id="Jf6-BF-0CK"/>
                 <outlet property="profilePhoto" destination="7eJ-Ko-Dyt" id="ROB-si-dRz"/>
-                <outlet property="progressBar" destination="g6B-FR-Pgt" id="h5L-r6-3dc"/>
+                <outlet property="progressBar" destination="5NS-5l-jps" id="Xlv-BD-C6J"/>
+                <outlet property="uploadingLabel" destination="iG8-7i-KlY" id="eOG-oE-Xyb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -35,7 +36,7 @@
                     <rect key="frame" x="37" y="201" width="300" height="250"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="18" translatesAutoresizingMaskIntoConstraints="NO" id="S6w-Oc-Nhr">
-                            <rect key="frame" x="75" y="36" width="150" height="179.33333333333334"/>
+                            <rect key="frame" x="75" y="30" width="150" height="191"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="upload an avatar" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ad2-wZ-l5v">
                                     <rect key="frame" x="12.333333333333336" y="0.0" width="125.33333333333331" height="15.333333333333334"/>
@@ -43,7 +44,7 @@
                                     <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="0.74834118149999995" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="7eJ-Ko-Dyt">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="7eJ-Ko-Dyt">
                                     <rect key="frame" x="35" y="33.333333333333314" width="80" height="80"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
@@ -51,13 +52,28 @@
                                         <constraint firstAttribute="height" constant="80" id="s1J-zA-Kjy"/>
                                     </constraints>
                                 </imageView>
-                                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="g6B-FR-Pgt">
-                                    <rect key="frame" x="0.0" y="131.33333333333331" width="150" height="2"/>
-                                    <color key="progressTintColor" red="1" green="0.2747408865" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="trackTintColor" red="1" green="0.14913141730000001" blue="0.0" alpha="0.74834118149999995" colorSpace="custom" customColorSpace="sRGB"/>
-                                </progressView>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="lS5-qe-Hnc">
+                                    <rect key="frame" x="0.0" y="131.33333333333331" width="150" height="13.666666666666657"/>
+                                    <subviews>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5NS-5l-jps">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="2"/>
+                                            <color key="progressTintColor" red="0.81338034560000005" green="1" blue="0.9995977238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="trackTintColor" red="0.015686274510000001" green="0.6705882353" blue="0.7725490196" alpha="0.75" colorSpace="calibratedRGB"/>
+                                        </progressView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="uploading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iG8-7i-KlY">
+                                            <rect key="frame" x="38.999999999999993" y="2" width="72.333333333333314" height="11.666666666666666"/>
+                                            <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="10"/>
+                                            <color key="textColor" red="0.015686274510000001" green="0.6705882353" blue="0.7725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="5NS-5l-jps" firstAttribute="leading" secondItem="lS5-qe-Hnc" secondAttribute="leading" id="LJ7-dj-o5n"/>
+                                        <constraint firstAttribute="trailing" secondItem="5NS-5l-jps" secondAttribute="trailing" id="Ulj-2Q-vI2"/>
+                                    </constraints>
+                                </stackView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mSw-0n-ReY">
-                                    <rect key="frame" x="40" y="151.33333333333331" width="70" height="28"/>
+                                    <rect key="frame" x="40" y="163" width="70" height="28"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="70" id="yuz-Gc-8e6"/>
                                     </constraints>
@@ -71,12 +87,12 @@
                                 </button>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="g6B-FR-Pgt" firstAttribute="leading" secondItem="S6w-Oc-Nhr" secondAttribute="leading" id="qpw-ik-4wx"/>
-                                <constraint firstAttribute="trailing" secondItem="g6B-FR-Pgt" secondAttribute="trailing" id="xeN-Si-dmH"/>
+                                <constraint firstAttribute="trailing" secondItem="lS5-qe-Hnc" secondAttribute="trailing" id="azm-ep-REx"/>
+                                <constraint firstItem="lS5-qe-Hnc" firstAttribute="leading" secondItem="S6w-Oc-Nhr" secondAttribute="leading" id="dG4-fE-wFj"/>
                             </constraints>
                         </stackView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O70-X3-X5T">
-                            <rect key="frame" x="110" y="69.333333333333314" width="80" height="80"/>
+                            <rect key="frame" x="110" y="63.333333333333314" width="80" height="80"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="80" id="nJf-jg-Xjm"/>
                                 <constraint firstAttribute="height" constant="80" id="sfZ-d0-cva"/>

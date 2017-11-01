@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class FeedVC: UIViewController {
     
@@ -18,6 +19,9 @@ class FeedVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        if Auth.auth().currentUser != nil {
+        AuthService.instance.setupUserUI()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

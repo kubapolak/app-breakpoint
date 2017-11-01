@@ -24,27 +24,27 @@ class MeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
         setupView()
-        
     }
     
     @objc func userStatusDidChange(_ notif: Notification) {
         setupView()
     }
     
+    @objc func userAvatarDidChange(_ notif: Notification) {
+        setupView()
+    }
+    
     func setupView() {
-        DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
-            self.statusLabel.text = userStatus
-            self.setupButtonText()
-        }
-        DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (avatar) in
-            self.profileImage.image = avatar
-        }
+        statusLabel.text = AuthService.status
+        profileImage.image = AuthService.avatar
+        setupButtonText()
     }
     
     func setupButtonText() {
@@ -67,7 +67,10 @@ class MeVC: UIViewController {
             }
         }
         logoutPopup.addAction(logoutAction)
+        logoutPopup.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: nil))
         present(logoutPopup, animated: true, completion: nil)
+        AuthService.avatar = UIImage(named: "defaultProfileImage")
+        AuthService.status = String()
     }
     
     @IBAction func setStatusButtonPressed(_ sender: Any) {

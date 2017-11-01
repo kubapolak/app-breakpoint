@@ -213,7 +213,7 @@
                                             <constraint firstAttribute="height" constant="40" id="JfY-9n-0mb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="18"/>
-                                        <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="0.74834118149999995" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.015686274510000001" green="0.6705882353" blue="0.7725490196" alpha="0.75" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vC6-O9-LSJ">
@@ -351,7 +351,7 @@
                                     <constraint firstItem="wVq-SP-k3s" firstAttribute="centerY" secondItem="V4k-Ve-ffe" secondAttribute="centerY" id="yQM-QW-V8u"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="6rA-JR-OZz">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="6rA-JR-OZz">
                                 <rect key="frame" x="20" y="150" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="fCg-8d-kIk"/>

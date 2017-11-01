@@ -17,25 +17,27 @@ class AddPhotoVC: UIViewController {
     
     @IBOutlet weak var progressBar: UIProgressView!
     
+    @IBOutlet weak var uploadingLabel: UILabel!
+    
     let imagePicker = UIImagePickerController()
+    
+    var tempImg = UIImage()
+    var tempImgData = Data()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         imagePicker.delegate = self
+        uploadingLabel.isHidden = true
+        progressBar.isHidden = true
+        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupView()
     }
     
     func setupView() {
-        
-        DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (avatar) in
-            self.profilePhoto.image = avatar
-        }
-        
+        self.profilePhoto.image = AuthService.avatar
         let closeTouch = UITapGestureRecognizer(target: self, action: #selector(AddPhotoVC.closeTap(_:)))
         bgView.addGestureRecognizer(closeTouch)
     }
@@ -45,14 +47,17 @@ class AddPhotoVC: UIViewController {
     }
     
     @IBAction func choosePhotoPressed(_ sender: Any) {
-        
         imagePicker.sourceType = .photoLibrary
         //mediaType default - still images
+        imagePicker.allowsEditing = true
         present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func confirmButtonTapped(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        uploadingLabel.isHidden = false
+        progressBar.isHidden = false
+        uploadImageToFirebase(tempImgData, userID: (Auth.auth().currentUser?.uid)!)
+        AuthService.avatar = tempImg
     }
     
     func uploadImageToFirebase(_ data: Data, userID: String) {
@@ -64,6 +69,8 @@ class AddPhotoVC: UIViewController {
                 print("error while uploading image: \(String(describing: error?.localizedDescription))")
             } else {
                 print("SUCCESS!, metadata: \(String(describing: metadata))")
+                NotificationCenter.default.post(name: NOTIF_AVATAR_DID_CHANGE, object: nil)
+                self.dismiss(animated: true, completion: nil)
             }
         }
         //update the progress bar
@@ -82,9 +89,11 @@ extension AddPhotoVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage, let imageData = UIImageJPEGRepresentation(originalImage, 0.8) {
-            uploadImageToFirebase(imageData, userID: (Auth.auth().currentUser?.uid)!)
+        if let originalImage = info[UIImagePickerControllerEditedImage] as? UIImage, let imageData = UIImageJPEGRepresentation(originalImage, 0.1) {
+            tempImgData = imageData
+            tempImg = originalImage
         }
+        self.profilePhoto.image = tempImg
         dismiss(animated: true, completion: nil)
     }
 }

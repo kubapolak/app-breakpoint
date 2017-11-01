@@ -11,3 +11,4 @@ import Foundation
 //NOTIFICATION NAMES
 
 let NOTIF_STATUS_DID_CHANGE = Notification.Name("notifStatusChanged")
+let NOTIF_AVATAR_DID_CHANGE = Notification.Name("notifAvatarChanged")
