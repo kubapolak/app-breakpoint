@@ -17,6 +17,7 @@
 		0450CFD31F93B6A700C4ECAB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFD21F93B6A700C4ECAB /* Assets.xcassets */; };
 		0450CFD61F93B6A700C4ECAB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFD41F93B6A700C4ECAB /* LaunchScreen.storyboard */; };
 		04669BA11F9676E000BCC92B /* MeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04669BA01F9676E000BCC92B /* MeVC.swift */; };
+		047BBEA91FAA957300555B5A /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 047BBEA81FAA957300555B5A /* Info.plist */; };
 		048595B91FA633570034908A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048595B81FA633570034908A /* Constants.swift */; };
 		048595BC1FA64AF30034908A /* AddPhotoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048595BA1FA64AF30034908A /* AddPhotoVC.swift */; };
 		048595BD1FA64AF30034908A /* AddPhotoVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 048595BB1FA64AF30034908A /* AddPhotoVC.xib */; };
@@ -37,7 +38,6 @@
 		04B57DAE1FA39A0900C5DCE3 /* GroupFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B57DAD1FA39A0900C5DCE3 /* GroupFeedCell.swift */; };
 		04B57DB01FA39A8700C5DCE3 /* GroupFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B57DAF1FA39A8700C5DCE3 /* GroupFeedVC.swift */; };
 		04C3735A1F96639700872C66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFE21F93B8D200C4ECAB /* GoogleService-Info.plist */; };
-		04C3735B1F9663A500872C66 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0450CFD71F93B6A700C4ECAB /* Info.plist */; };
 		34E0280C2061AF613690B92A /* Pods_breakpoint.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E24F6C13480743637B895152 /* Pods_breakpoint.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,9 +52,9 @@
 		0450CFD01F93B6A700C4ECAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0450CFD21F93B6A700C4ECAB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0450CFD51F93B6A700C4ECAB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		0450CFD71F93B6A700C4ECAB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0450CFE21F93B8D200C4ECAB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		04669BA01F9676E000BCC92B /* MeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeVC.swift; sourceTree = "<group>"; };
+		047BBEA81FAA957300555B5A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		048595B81FA633570034908A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		048595BA1FA64AF30034908A /* AddPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoVC.swift; sourceTree = "<group>"; };
 		048595BB1FA64AF30034908A /* AddPhotoVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddPhotoVC.xib; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 				0450CFCF1F93B6A700C4ECAB /* Main.storyboard */,
 				0450CFD21F93B6A700C4ECAB /* Assets.xcassets */,
 				0450CFD41F93B6A700C4ECAB /* LaunchScreen.storyboard */,
-				0450CFD71F93B6A700C4ECAB /* Info.plist */,
+				047BBEA81FAA957300555B5A /* Info.plist */,
 				0450CFE21F93B8D200C4ECAB /* GoogleService-Info.plist */,
 			);
 			path = breakpoint;
@@ -286,9 +286,9 @@
 				0450CFD61F93B6A700C4ECAB /* LaunchScreen.storyboard in Resources */,
 				04C3735A1F96639700872C66 /* GoogleService-Info.plist in Resources */,
 				0450CFD31F93B6A700C4ECAB /* Assets.xcassets in Resources */,
-				04C3735B1F9663A500872C66 /* Info.plist in Resources */,
 				048595BD1FA64AF30034908A /* AddPhotoVC.xib in Resources */,
 				0450CFD11F93B6A700C4ECAB /* Main.storyboard in Resources */,
+				047BBEA91FAA957300555B5A /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
