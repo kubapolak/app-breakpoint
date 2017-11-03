@@ -24,6 +24,7 @@ class CreateGroupsVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var emailArray = [String]()
+    var idArray = [String]()
     var chosenUserArray = [String]()
     
     override func viewDidLoad() {
@@ -40,15 +41,20 @@ class CreateGroupsVC: UIViewController {
     }
     
     @objc func textFieldDidChange() {
-        if emailSearchTextField.text == "" {
-            emailArray = []
-            tableView.reloadData()
-        } else {
+        if emailSearchTextField.text != "" {
             DataService.instance.getEmail(forSearchQuery: emailSearchTextField.text!, handler: { (returnedEmailArray) in
                 self.emailArray = returnedEmailArray
-                self.tableView.reloadData()
+                DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
+                    self.idArray = returnedIds
+                    self.tableView.reloadData()
+                })
             })
+        } else {
+            emailArray = []
+            idArray = []
+            tableView.reloadData()
         }
+        
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
@@ -83,13 +89,18 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserCell else { return UITableViewCell() }
-        let profileImage = UIImage(named: "defaultProfileImage")
+        var image = UIImage(named: "defaultProfileImage")
+        var selected = Bool()
         
         if chosenUserArray.contains(cell.emailLabel.text!) {
-            cell.configureCell(profileImage: profileImage!, email: emailArray[indexPath.row], isSelected: true)
+            selected = true
         } else {
-        cell.configureCell(profileImage: profileImage!, email: emailArray[indexPath.row], isSelected: false)
+            selected = false
         }
+        DataService.instance.downloadUserAvatar(userID: idArray[indexPath.row], handler: { (avatar) in
+            image = avatar
+            cell.configureCell(profileImage: image!, email: self.emailArray[indexPath.row], isSelected: selected)
+            })
         return cell
     }
     
