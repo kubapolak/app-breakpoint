@@ -25,6 +25,7 @@ class CreateGroupsVC: UIViewController {
     
     var emailArray = [String]()
     var idArray = [String]()
+    var avatarArray = [UIImage]()
     var chosenUserArray = [String]()
     
     override func viewDidLoad() {
@@ -40,21 +41,33 @@ class CreateGroupsVC: UIViewController {
         doneButton.isHidden = true
     }
     
+    func clearArrays(completion: @escaping (_ done: Bool) -> ()) {
+        emailArray = []
+        idArray = []
+        avatarArray = []
+        completion(true)
+    }
+    
     @objc func textFieldDidChange() {
-        if emailSearchTextField.text != "" {
+        if emailSearchTextField.text == "" {
+            clearArrays(completion: { (done) in
+                if done {
+                self.tableView.reloadData()
+                }
+            })
+        } else {
             DataService.instance.getEmail(forSearchQuery: emailSearchTextField.text!, handler: { (returnedEmailArray) in
                 self.emailArray = returnedEmailArray
                 DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
                     self.idArray = returnedIds
-                    self.tableView.reloadData()
-                })
-            })
-        } else {
-            emailArray = []
-            idArray = []
-            tableView.reloadData()
-        }
-        
+                    DataService.instance.downloadMultipleAvatars(ids: self.idArray, handler: { (avatars) in
+                        self.avatarArray = avatars
+                        self.tableView.reloadData()
+                            })
+                        })
+                    }
+                )
+            }
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
@@ -89,18 +102,14 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserCell else { return UITableViewCell() }
-        var image = UIImage(named: "defaultProfileImage")
-        var selected = Bool()
         
+        var selected = Bool()
         if chosenUserArray.contains(cell.emailLabel.text!) {
             selected = true
         } else {
             selected = false
         }
-        DataService.instance.downloadUserAvatar(userID: idArray[indexPath.row], handler: { (avatar) in
-            image = avatar
-            cell.configureCell(profileImage: image!, email: self.emailArray[indexPath.row], isSelected: selected)
-            })
+            cell.configureCell(profileImage: self.avatarArray[indexPath.row], email: self.emailArray[indexPath.row], isSelected: selected)
         return cell
     }
     

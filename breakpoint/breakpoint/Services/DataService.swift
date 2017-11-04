@@ -112,12 +112,11 @@ class DataService {
     }
     
     func getIds(forUserNames usernames: [String], handler: @escaping (_ uidArray: [String]) -> ()) {
+        var idArray = [String]()
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
-            var idArray = [String]()
             guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
             for user in userSnapshot {
                 let email = user.childSnapshot(forPath: "email").value as! String
-                
                 if usernames.contains(email) {
                     idArray.append(user.key)
                 }
@@ -154,6 +153,20 @@ class DataService {
                 }
             }
             handler(userStatus)
+        }
+    }
+    
+    func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage]) -> ()) {
+        var imageArray = [UIImage]()
+        var doneCount = 0
+        for id in ids {
+            downloadUserAvatar(userID: id, handler: { (avatar) in
+                imageArray.append(avatar)
+                doneCount += 1
+                if doneCount == ids.count {
+                    handler(imageArray)
+                }
+            })
         }
     }
     
