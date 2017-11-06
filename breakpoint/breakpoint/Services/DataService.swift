@@ -157,13 +157,13 @@ class DataService {
     }
     
     func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage]) -> ()) {
+        print("FUCK!")
         var imageArray = [UIImage]()
-        var doneCount = 0
         for id in ids {
             downloadUserAvatar(userID: id, handler: { (avatar) in
                 imageArray.append(avatar)
-                doneCount += 1
-                if doneCount == ids.count {
+                print("ADDED")
+                if imageArray.count == ids.count {
                     handler(imageArray)
                 }
             })

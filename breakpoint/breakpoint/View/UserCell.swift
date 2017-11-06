@@ -18,6 +18,10 @@ class UserCell: UITableViewCell {
     
     var showing = false
     
+    func configureAvatar(avatar: UIImage) {
+        self.profileImage.image = avatar
+    }
+    
     func configureCell(profileImage image: UIImage, email: String, isSelected: Bool) {
         self.profileImage.image = image
         self.emailLabel.text = email

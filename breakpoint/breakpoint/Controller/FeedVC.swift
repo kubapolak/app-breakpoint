@@ -51,10 +51,6 @@ extension FeedVC: UITableViewDelegate, UITableViewDataSource {
         var image = UIImage(named: "defaultProfileImage")
         let message = messageArray[indexPath.row]
         
-        
-        
-   
-        
         DataService.instance.getUsername(forUID: message.senderId) { (returnedUsername) in
             DataService.instance.getUserStatus(forUser: message.senderId, handler: { (userStatus) in
                 DataService.instance.downloadUserAvatar(userID: message.senderId) { (avatar) in

@@ -56,18 +56,30 @@ class CreateGroupsVC: UIViewController {
                 }
             })
         } else {
-            DataService.instance.getEmail(forSearchQuery: emailSearchTextField.text!, handler: { (returnedEmailArray) in
-                self.emailArray = returnedEmailArray
-                DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
-                    self.idArray = returnedIds
-                    DataService.instance.downloadMultipleAvatars(ids: self.idArray, handler: { (avatars) in
-                        self.avatarArray = avatars
-                        self.tableView.reloadData()
-                            })
-                        })
-                    }
-                )
+            searchForUsers()
             }
+    }
+    
+    func searchForUsers() {
+        let emailSearch = emailSearchTextField.text!
+        DispatchQueue.global(qos: .userInteractive).async {
+            DataService.instance.getEmail(forSearchQuery: emailSearch, handler: { (returnedEmailArray) in
+                    self.emailArray = returnedEmailArray
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            })
+        }
+        
+        //                DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
+        //                        self.idArray = returnedIds
+        //                    DataService.instance.downloadMultipleAvatars(ids: self.idArray, handler: { (avatars) in
+        //                        DispatchQueue.main.async {
+        //                            self.avatarArray = avatars
+        //                            self.tableView.reloadData()
+        //                        }
+        //                    })
+        //                })
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
@@ -109,7 +121,8 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
         } else {
             selected = false
         }
-            cell.configureCell(profileImage: self.avatarArray[indexPath.row], email: self.emailArray[indexPath.row], isSelected: selected)
+        cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: self.emailArray[indexPath.row], isSelected: selected)
+            //cell.configureCell(profileImage: self.avatarArray[indexPath.row], email: self.emailArray[indexPath.row], isSelected: selected)
         return cell
     }
     
