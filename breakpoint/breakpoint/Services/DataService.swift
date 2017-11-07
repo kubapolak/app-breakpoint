@@ -65,7 +65,7 @@ class DataService {
         }
     }
     
-    func getAllFeedMessages(handler: @escaping (_ messages: [Message]) -> ()) {
+    func getAllFeedMessages(handler: @escaping (_ messages: [Message], _ done: Bool) -> ()) {
         var messageArray = [Message]()
         REF_FEED.observeSingleEvent(of: .value) { (feedMessageSnapshot) in
             guard let feedMessageSnapshot = feedMessageSnapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -78,7 +78,7 @@ class DataService {
                 messageArray.append(message)
             }
             
-            handler(messageArray)
+            handler(messageArray, true)
         }
     }
     
@@ -156,15 +156,14 @@ class DataService {
         }
     }
     
-    func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage]) -> ()) {
+    func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage], _ done: Bool) -> ()) {
         print("FUCK!")
         var imageArray = [UIImage]()
         for id in ids {
             downloadUserAvatar(userID: id, handler: { (avatar) in
                 imageArray.append(avatar)
-                print("ADDED")
                 if imageArray.count == ids.count {
-                    handler(imageArray)
+                    handler(imageArray, true)
                 }
             })
         }
