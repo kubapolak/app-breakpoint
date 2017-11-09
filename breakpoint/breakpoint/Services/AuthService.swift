@@ -40,8 +40,10 @@ class AuthService {
     }
     
     func setupUserUI() {
-    DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (userAvatar) in
+    DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (userAvatar, finished) in
+        if finished {
     AuthService.avatar = userAvatar
+        }
         }
     DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
     AuthService.status = userStatus

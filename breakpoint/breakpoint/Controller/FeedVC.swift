@@ -13,6 +13,10 @@ class FeedVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var noMessagesLabel: UILabel!
+    @IBOutlet weak var loadingLabel: UILabel!
+    @IBOutlet weak var actSpinner: UIActivityIndicatorView!
+    
     var messageArray = [Message]()
     var usernameArray = [String]()
     var avatarArray = [UIImage]()
@@ -30,7 +34,6 @@ class FeedVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        clearArrays()
         getMessages()
         
         if self.messageArray.count > 0 {
@@ -52,13 +55,10 @@ class FeedVC: UIViewController {
             self.idArray.append(message.senderId)
             DataService.instance.getUserStatus(forUser: message.senderId, handler: { (status) in
                 self.statusArray.append(status)
-                print("STATUSES, \(self.statusArray.count)")
             })
             DataService.instance.getUsername(forUID: message.senderId, handler: { (username) in
                 self.usernameArray.append(username)
-                print("EMAILS, \(self.usernameArray.count)")
                 if self.usernameArray.count == self.messageArray.count {
-                    print("LOL?")
                     handler(true)
                 }
             })
@@ -66,22 +66,36 @@ class FeedVC: UIViewController {
     }
     
     func getMessages() {
+        noMessagesLabel.isHidden = true
+        actSpinner.isHidden = false
+        actSpinner.startAnimating()
+        loadingLabel.isHidden = false
+        clearArrays()
         DataService.instance.getAllFeedMessages { (returnedMessagesArray, finished) in
+            if returnedMessagesArray.count > 0 {
             self.messageArray = returnedMessagesArray.reversed()
             if finished {
-            print("MESSAGES, \(self.messageArray.count)")
                 self.getUsersData(handler: { (finished) in
                     if finished {
-                        print("GOT USER DATA")
                     DataService.instance.downloadMultipleAvatars(ids: self.idArray, handler: { (avatars, finished) in
-                        self.avatarArray = avatars
                         if finished {
-                            print("AVATARS")
+                            
+                            self.avatarArray = avatars
+                            self.actSpinner.stopAnimating()
+                            self.actSpinner.isHidden = true
+                            self.loadingLabel.isHidden = true
                             self.tableView.reloadData()
                         }
                     })
                     }
                 })
+            }
+            } else {
+                self.actSpinner.stopAnimating()
+                self.actSpinner.isHidden = true
+                self.loadingLabel.isHidden = true
+                self.noMessagesLabel.isHidden = false
+                return
             }
         }
     }

@@ -157,28 +157,44 @@ class DataService {
     }
     
     func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage], _ done: Bool) -> ()) {
-        print("FUCK!")
+        print(ids)
         var imageArray = [UIImage]()
+        let arrayLength = ids.count
+        for _ in 1...arrayLength {
+            imageArray.append(UIImage())
+        }
+        var index = 0
+        var picCount = 0
         for id in ids {
-            downloadUserAvatar(userID: id, handler: { (avatar) in
-                imageArray.append(avatar)
-                if imageArray.count == ids.count {
-                    handler(imageArray, true)
+            let tempIndex = index
+            downloadUserAvatar(userID: ids[tempIndex], handler: { (avatar, finished) in
+                if finished {
+                    print("")
+                    picCount += 1
+                    print("pic count: \(picCount)")
+                    print(tempIndex)
+                    print(id)
+                    imageArray[tempIndex] = avatar
+                    if picCount == ids.count {
+                        handler(imageArray, true)
+                    }
                 }
             })
+            index += 1
+            
         }
     }
     
-    func downloadUserAvatar(userID: String, handler: @escaping (_ image: UIImage) -> ()) {
+    func downloadUserAvatar(userID: String, handler: @escaping (_ image: UIImage, _ done: Bool) -> ()) {
         let storageRef = Storage.storage().reference(withPath: "userAvatars/\(userID).jpg")
         storageRef.downloadURL { (url, error) in
             if error != nil {
                 print("error while downloading image url: \(String(describing: error?.localizedDescription))")
-                handler(UIImage(named: "defaultProfileImage")!)
+                handler(UIImage(named: "defaultProfileImage")!, true)
             } else {
                 let avatarData = NSData(contentsOf: url!)
                 let avatarIMG = UIImage(data: avatarData! as Data)
-                handler(avatarIMG!)
+                handler(avatarIMG!, true)
             }
         }
     }
