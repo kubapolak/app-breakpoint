@@ -25,6 +25,7 @@ class MeVC: UIViewController {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
+        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {

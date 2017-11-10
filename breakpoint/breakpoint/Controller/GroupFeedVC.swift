@@ -21,6 +21,8 @@ class GroupFeedVC: UIViewController {
     
     var group: Group?
     var groupMessages = [Message]()
+    var groupAvatars = [String: UIImage]()
+    var avatarsDownloaded = Bool()
     
     func initData(forGroup group: Group) {
         self.group = group
@@ -31,6 +33,8 @@ class GroupFeedVC: UIViewController {
         sendButtonView.bindToKeyboard()
         tableView.delegate = self
         tableView.dataSource = self
+        avatarsDownloaded = false
+        getUserAvatars()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,12 +47,26 @@ class GroupFeedVC: UIViewController {
         DataService.instance.REF_GROUPS.observe(.value) { (snapShot) in
             DataService.instance.getAllMessagesFor(desiredGroup: self.group!, handler: { (returnedGroupMessages) in
                 self.groupMessages = returnedGroupMessages
-                self.tableView.reloadData()
-                
-                if self.groupMessages.count > 0 {
-                    self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .none, animated: animated)
+                if self.avatarsDownloaded {
+                    self.tableView.reloadData()
+                    if self.groupMessages.count > 0 {
+                        self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .bottom, animated: true)
+                    }
                 }
             })
+        }
+    }
+    
+    func getUserAvatars() {
+        DataService.instance.getAvatarsForGroup(group: group!) { (returnedDict, finished) in
+            if finished {
+                self.avatarsDownloaded = true
+                self.groupAvatars = returnedDict
+                self.tableView.reloadData()
+                if self.groupMessages.count > 0 {
+                    self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .bottom, animated: true)
+                }
+            }
         }
     }
     
@@ -85,7 +103,7 @@ extension GroupFeedVC: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "groupFeedCell", for: indexPath) as? GroupFeedCell else { return UITableViewCell() }
         let message = groupMessages[indexPath.row]
         DataService.instance.getUsername(forUID: message.senderId) { (email) in
-            cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: email, content: message.content)
+            cell.configureCell(profileImage: self.groupAvatars["\(message.senderId)"]!, email: email, content: message.content)
         }
         return cell
     }

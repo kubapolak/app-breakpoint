@@ -139,6 +139,25 @@ class DataService {
         }
     }
     
+    func getAvatarsForGroup(group: Group, handler: @escaping (_ avatarDictionary: [String: UIImage], _ done: Bool) -> ()) {
+        var avatarDictionary = [String: UIImage]()
+        REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
+            guard let userSnapshot = userSnapshot.children.allObjects as? [DataSnapshot] else { return }
+            for user in userSnapshot {
+                if group.members.contains(user.key) {
+                self.downloadUserAvatar(userID: user.key, handler: { (avatar, done) in
+                    if done {
+                        avatarDictionary[user.key] = avatar
+                        if avatarDictionary.count == group.memberCount {
+                            handler(avatarDictionary, true)
+                        }
+                    }
+                })
+                }
+            }
+        }
+    }
+    
     func getUserStatus(forUser userUid: String, handler: @escaping (_ userStatus: String) -> ()) {
         var userStatus = String()
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
@@ -157,7 +176,6 @@ class DataService {
     }
     
     func downloadMultipleAvatars(ids: [String], handler: @ escaping (_ imageArray: [UIImage], _ done: Bool) -> ()) {
-        print(ids)
         var imageArray = [UIImage]()
         let arrayLength = ids.count
         for _ in 1...arrayLength {
@@ -165,15 +183,11 @@ class DataService {
         }
         var index = 0
         var picCount = 0
-        for id in ids {
+        for _ in ids {
             let tempIndex = index
             downloadUserAvatar(userID: ids[tempIndex], handler: { (avatar, finished) in
                 if finished {
-                    print("")
                     picCount += 1
-                    print("pic count: \(picCount)")
-                    print(tempIndex)
-                    print(id)
                     imageArray[tempIndex] = avatar
                     if picCount == ids.count {
                         handler(imageArray, true)
