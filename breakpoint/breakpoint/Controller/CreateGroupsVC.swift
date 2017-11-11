@@ -39,6 +39,7 @@ class CreateGroupsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         doneButton.isHidden = true
+        chosenUserArray = []
     }
     
     func clearArrays(completion: @escaping (_ done: Bool) -> ()) {

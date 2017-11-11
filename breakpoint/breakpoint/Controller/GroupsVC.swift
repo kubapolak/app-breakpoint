@@ -19,16 +19,16 @@ class GroupsVC: UIViewController {
         super.viewDidLoad()
         groupsTableView.delegate = self
         groupsTableView.dataSource = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         DataService.instance.REF_GROUPS.observe(.value) { (snapshot) in
             DataService.instance.getAllGroups { (returnedGroupsArray) in
                 self.groupsArray = returnedGroupsArray
-                self.groupsTableView.reloadData()
             }
         }
+    }
+    
+    override func viewWillAppear (_ animated: Bool) {
+        super.viewWillAppear(animated)
+        groupsTableView.reloadData()
     }
 }
 

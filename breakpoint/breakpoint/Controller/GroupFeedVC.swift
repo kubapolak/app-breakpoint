@@ -19,6 +19,11 @@ class GroupFeedVC: UIViewController {
     @IBOutlet weak var messageTextField: InsetTextField!
     @IBOutlet weak var sendButton: UIButton!
     
+    @IBOutlet weak var noMessagesLabel: UILabel!
+    @IBOutlet weak var loadingLabel: UILabel!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    
     var group: Group?
     var groupMessages = [Message]()
     var groupAvatars = [String: UIImage]()
@@ -41,31 +46,47 @@ class GroupFeedVC: UIViewController {
         super.viewWillAppear(animated)
         groupTitleLabel.text = group?.groupTitle
         DataService.instance.getEmailsForGroup(group: group!) { (returnedEmails) in
-             self.membersLabel.text = returnedEmails.joined(separator: ", ")
+            self.membersLabel.text = returnedEmails.joined(separator: ", ")
         }
-        
+        getMessages()
+    }
+    
+    func getMessages() {
+        noMessagesLabel.isHidden = true
+        spinner.isHidden = false
+        spinner.startAnimating()
+        loadingLabel.isHidden = false
         DataService.instance.REF_GROUPS.observe(.value) { (snapShot) in
             DataService.instance.getAllMessagesFor(desiredGroup: self.group!, handler: { (returnedGroupMessages) in
                 self.groupMessages = returnedGroupMessages
                 if self.avatarsDownloaded {
+                    self.spinner.stopAnimating()
+                    self.spinner.isHidden = true
+                    self.loadingLabel.isHidden = true
                     self.tableView.reloadData()
-                    if self.groupMessages.count > 0 {
-                        self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .bottom, animated: true)
-                    }
+                    self.scrollToBottom()
                 }
             })
         }
     }
     
+    func scrollToBottom() {
+        if self.groupMessages.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .bottom, animated: true)
+        } else {
+            self.noMessagesLabel.isHidden = false
+        }
+    }
+    
     func getUserAvatars() {
+        spinner.isHidden = false
+        spinner.startAnimating()
+        loadingLabel.isHidden = false
         DataService.instance.getAvatarsForGroup(group: group!) { (returnedDict, finished) in
             if finished {
-                self.avatarsDownloaded = true
                 self.groupAvatars = returnedDict
-                self.tableView.reloadData()
-                if self.groupMessages.count > 0 {
-                    self.tableView.scrollToRow(at: IndexPath.init(row: self.groupMessages.count - 1, section: 0), at: .bottom, animated: true)
-                }
+                self.avatarsDownloaded = true
+                self.getMessages()
             }
         }
     }
@@ -76,6 +97,7 @@ class GroupFeedVC: UIViewController {
     
     @IBAction func sendButtonPressed(_ sender: Any) {
         if messageTextField.text != "" {
+            noMessagesLabel.isHidden = true
             messageTextField.isEnabled = false
             sendButton.isEnabled = false
             DataService.instance.uploadPost(withMessage: messageTextField.text!, forUID: Auth.auth().currentUser!.uid, withGroupKey: group?.key, sendComplete: { (complete) in
