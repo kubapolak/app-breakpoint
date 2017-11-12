@@ -17,6 +17,8 @@ class FeedVC: UIViewController {
     @IBOutlet weak var loadingLabel: UILabel!
     @IBOutlet weak var actSpinner: UIActivityIndicatorView!
     
+    private let refreshControl = UIRefreshControl()
+    
     var messageArray = [Message]()
     var usernameDict = [String: String]()
     var idArray = [String]()
@@ -28,6 +30,16 @@ class FeedVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
+        
         if Auth.auth().currentUser != nil {
         AuthService.instance.setupUserUI()
         }
@@ -49,6 +61,11 @@ class FeedVC: UIViewController {
         if self.messageArray.count > 0 {
             tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
         }
+    }
+    
+    @objc private func refresh(_ sender: Any) {
+        updateMessages()
+        scrollToTop()
     }
     
     func clearUserData() {
@@ -147,6 +164,9 @@ class FeedVC: UIViewController {
                                 self.actSpinner.stopAnimating()
                                 self.actSpinner.isHidden = true
                                 self.loadingLabel.isHidden = true
+                                
+                                self.refreshControl.endRefreshing()
+                                
                                 self.tableView.reloadData()
                             } else {
                                 print("")
