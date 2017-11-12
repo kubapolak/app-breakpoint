@@ -23,6 +23,8 @@ class MeVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
         NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
         setupView()
@@ -86,4 +88,21 @@ class MeVC: UIViewController {
         present(addPhotoVC, animated: true, completion: nil)
     }
     
+}
+
+extension MeVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "myPostCell") as? MyPostsCell else { return UITableViewCell() }
+        cell.configureCell(withContent: "LOL")
+        return cell
+    }
 }
