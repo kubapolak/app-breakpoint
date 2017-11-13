@@ -21,6 +21,12 @@ class MeVC: UIViewController {
     
     @IBOutlet weak var setStatusButton: UIButton!
     
+    @IBOutlet weak var myMsgsToggle: UISegmentedControl!
+    
+    var myGroups = [Group]()
+    var myFeedMessages = [String]()
+    var myGroupMessages = [[String]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
@@ -34,6 +40,7 @@ class MeVC: UIViewController {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
         setupView()
+        getMyMessages()
     }
     
     @objc func userStatusDidChange(_ notif: Notification) {
@@ -50,6 +57,35 @@ class MeVC: UIViewController {
         setupButtonText()
     }
     
+    func getMyMessages() {
+        if myMsgsToggle.selectedSegmentIndex == 0 {
+            getMyFeedMessages()
+            tableView.reloadData()
+        } else if myMsgsToggle.selectedSegmentIndex == 1 {
+            getMyGroupMessages()
+            tableView.reloadData()
+        }
+    }
+    
+    func getMyFeedMessages() {
+        DataService.instance.getMyFeedMessages { (returnedMessages) in
+            self.myFeedMessages = returnedMessages
+            self.tableView.reloadData()
+        }
+    }
+    
+    func getMyGroupMessages() {
+        DataService.instance.getAllGroups { (returnedGroups) in
+            self.myGroups = returnedGroups
+            DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, finished) in
+                if finished {
+                    self.myGroupMessages = returnedGroupMessages
+                    self.tableView.reloadData()
+                }
+            })
+        }
+    }
+    
     func setupButtonText() {
         if self.statusLabel.text == "" {
             setStatusButton.setTitle("set status", for: .normal)
@@ -57,6 +93,11 @@ class MeVC: UIViewController {
             setStatusButton.setTitle("change status", for: .normal)
         }
     }
+    
+    @IBAction func myMsgsToggleTapped(_ sender: UISegmentedControl) {
+        getMyMessages()
+    }
+    
     
     @IBAction func signOutButtonPressed(_ sender: Any) {
         let logoutPopup = UIAlertController(title: "logout?", message: "are you sure?", preferredStyle: .actionSheet)
@@ -93,16 +134,34 @@ class MeVC: UIViewController {
 extension MeVC: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        var numOfSections = 0
+        if myMsgsToggle.selectedSegmentIndex == 0 {
+            numOfSections = 1
+        } else if myMsgsToggle.selectedSegmentIndex == 1 {
+            numOfSections = myGroupMessages.count
+        }
+        return numOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        var numOfRows = 0
+        if myMsgsToggle.selectedSegmentIndex == 0 {
+            numOfRows = myFeedMessages.count
+        } else if myMsgsToggle.selectedSegmentIndex == 1 {
+            numOfRows = myGroupMessages[section].count
+        }
+        return numOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "myPostCell") as? MyPostsCell else { return UITableViewCell() }
-        cell.configureCell(withContent: "LOL")
+        var content = ""
+        if myMsgsToggle.selectedSegmentIndex == 0 {
+            content = myFeedMessages[indexPath.row]
+        } else if myMsgsToggle.selectedSegmentIndex == 1 {
+            content = myGroupMessages[indexPath.section][indexPath.row]
+        }
+        cell.configureCell(withContent: content)
         return cell
     }
 }

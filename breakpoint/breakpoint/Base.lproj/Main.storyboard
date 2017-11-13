@@ -235,7 +235,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QPv-KO-ivV">
-                                <rect key="frame" x="0.0" y="130" width="375" height="275"/>
+                                <rect key="frame" x="0.0" y="130" width="375" height="325"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultProfileImage" translatesAutoresizingMaskIntoConstraints="NO" id="xTb-nG-Oj7">
                                         <rect key="frame" x="137.66666666666666" y="30" width="100" height="100"/>
@@ -264,7 +264,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jFu-qe-DCI">
-                                        <rect key="frame" x="122.66666666666669" y="232" width="130" height="31"/>
+                                        <rect key="frame" x="122.66666666666669" y="230" width="130" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="130" id="YMf-gp-ove"/>
                                         </constraints>
@@ -286,25 +286,49 @@
                                             <action selector="photoButtonPressed:" destination="ExI-FU-kPl" eventType="touchUpInside" id="vXT-QF-urt"/>
                                         </connections>
                                     </button>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FJs-xc-usF">
+                                        <rect key="frame" x="87.666666666666686" y="295" width="200" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="LaL-Go-mit"/>
+                                            <constraint firstAttribute="height" constant="20" id="g5Q-jz-aar"/>
+                                        </constraints>
+                                        <segments>
+                                            <segment title="feed"/>
+                                            <segment title="groups"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="myMsgsToggleTapped:" destination="ExI-FU-kPl" eventType="valueChanged" id="SIp-1r-2Z7"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="your messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nxC-1C-yai">
+                                        <rect key="frame" x="140.66666666666666" y="276" width="94" height="14"/>
+                                        <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="12"/>
+                                        <color key="textColor" red="0.81338034560000005" green="1" blue="0.9995977238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.25490196079999999" green="0.27058823529999998" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="vC6-O9-LSJ" firstAttribute="centerX" secondItem="QPv-KO-ivV" secondAttribute="centerX" id="2wf-ab-2Mt"/>
                                     <constraint firstItem="Bzk-gk-GmY" firstAttribute="centerX" secondItem="xTb-nG-Oj7" secondAttribute="centerX" id="4eN-KB-Jxn"/>
-                                    <constraint firstAttribute="height" constant="275" id="80K-iq-2R1"/>
+                                    <constraint firstAttribute="bottom" secondItem="FJs-xc-usF" secondAttribute="bottom" constant="10" id="4v6-k2-ZoN"/>
+                                    <constraint firstAttribute="height" constant="325" id="80K-iq-2R1"/>
                                     <constraint firstItem="ebe-oF-ruG" firstAttribute="leading" secondItem="QPv-KO-ivV" secondAttribute="leading" constant="65" id="E2d-bV-FUf"/>
+                                    <constraint firstItem="FJs-xc-usF" firstAttribute="centerX" secondItem="QPv-KO-ivV" secondAttribute="centerX" id="FvD-Fd-02G"/>
                                     <constraint firstAttribute="trailing" secondItem="ebe-oF-ruG" secondAttribute="trailing" constant="65" id="GYR-jg-Oq0"/>
                                     <constraint firstItem="Bzk-gk-GmY" firstAttribute="centerY" secondItem="xTb-nG-Oj7" secondAttribute="centerY" id="Ghn-CX-5QA"/>
                                     <constraint firstItem="xTb-nG-Oj7" firstAttribute="top" secondItem="QPv-KO-ivV" secondAttribute="top" constant="30" id="ZAP-CT-1x9"/>
+                                    <constraint firstItem="jFu-qe-DCI" firstAttribute="top" secondItem="vC6-O9-LSJ" secondAttribute="bottom" constant="15" id="aMc-hU-q0M"/>
                                     <constraint firstItem="ebe-oF-ruG" firstAttribute="top" secondItem="xTb-nG-Oj7" secondAttribute="bottom" constant="20" id="aq2-O1-AJb"/>
+                                    <constraint firstItem="FJs-xc-usF" firstAttribute="top" secondItem="nxC-1C-yai" secondAttribute="bottom" constant="5" id="bK1-dt-obp"/>
                                     <constraint firstItem="vC6-O9-LSJ" firstAttribute="top" secondItem="ebe-oF-ruG" secondAttribute="bottom" constant="5" id="f9e-vL-0op"/>
                                     <constraint firstItem="jFu-qe-DCI" firstAttribute="centerX" secondItem="QPv-KO-ivV" secondAttribute="centerX" id="fRS-hU-Hnd"/>
-                                    <constraint firstAttribute="bottom" secondItem="jFu-qe-DCI" secondAttribute="bottom" constant="12" id="jPN-Sj-fLJ"/>
+                                    <constraint firstItem="nxC-1C-yai" firstAttribute="centerX" secondItem="FJs-xc-usF" secondAttribute="centerX" id="hHy-C6-hAx"/>
                                     <constraint firstItem="xTb-nG-Oj7" firstAttribute="centerX" secondItem="QPv-KO-ivV" secondAttribute="centerX" id="r7N-Xq-H3h"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3qM-Rw-bxn">
-                                <rect key="frame" x="0.0" y="405" width="375" height="324"/>
+                                <rect key="frame" x="0.0" y="455" width="375" height="274"/>
                                 <color key="backgroundColor" red="0.25490196079999999" green="0.27058823529999998" blue="0.31372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="myPostCell" rowHeight="55" id="gVL-ZR-BIJ" customClass="MyPostsCell" customModule="breakpoint" customModuleProvider="target">
@@ -354,6 +378,7 @@
                     <tabBarItem key="tabBarItem" title="me" image="me-tabIcon" selectedImage="me-tabIcon" id="AM4-zs-Ubq"/>
                     <connections>
                         <outlet property="emailLbl" destination="ebe-oF-ruG" id="c9R-5G-CKU"/>
+                        <outlet property="myMsgsToggle" destination="FJs-xc-usF" id="8A7-Za-Va3"/>
                         <outlet property="profileImage" destination="xTb-nG-Oj7" id="I3S-w0-dLy"/>
                         <outlet property="setStatusButton" destination="jFu-qe-DCI" id="uhQ-iv-WYl"/>
                         <outlet property="statusLabel" destination="vC6-O9-LSJ" id="6Yu-Tq-QUR"/>

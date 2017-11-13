@@ -139,6 +139,42 @@ class DataService {
         }
     }
     
+    func getMyFeedMessages(handler: @escaping (_ messagesArray: [String]) -> ()) {
+        var messagesArray = [String]()
+        REF_FEED.observeSingleEvent(of: .value) { (feedSnapshot) in
+            guard let feedSnapshot = feedSnapshot.children.allObjects as? [DataSnapshot] else { return }
+            for message in feedSnapshot {
+                let id = message.childSnapshot(forPath: "senderId").value as! String
+                if id == Auth.auth().currentUser?.uid {
+                    let content = message.childSnapshot(forPath: "content").value as! String
+                    messagesArray.append(content)
+                }
+            }
+            handler(messagesArray.reversed())
+        }
+    }
+    
+    func getMyGroupMessages(_ groups: [Group], handler: @escaping (_ messageGroupsArray: [[String]], _ done: Bool) -> ()) {
+        var messageGroupsArray = [[String]]()
+        for group in groups {
+            var messagesArray = [String]()
+            REF_GROUPS.child(group.key).child("messages").observeSingleEvent(of: .value) { (groupMessageSnapshot) in
+                guard let groupMessageSnapshot = groupMessageSnapshot.children.allObjects as? [DataSnapshot] else { return }
+                for groupMessage in groupMessageSnapshot {
+                    let content = groupMessage.childSnapshot(forPath: "content").value as! String
+                    let senderId = groupMessage.childSnapshot(forPath: "senderId").value as! String
+                    if senderId == Auth.auth().currentUser?.uid {
+                        messagesArray.append(content)
+                        }
+                    }
+                messageGroupsArray.append(messagesArray.reversed())
+                if messageGroupsArray.count == groups.count {
+                    handler(messageGroupsArray, true)
+                }
+            }
+        }
+    }
+    
     func getAvatarsForGroup(group: Group, handler: @escaping (_ avatarDictionary: [String: UIImage], _ done: Bool) -> ()) {
         var avatarDictionary = [String: UIImage]()
         REF_USERS.observeSingleEvent(of: .value) { (userSnapshot) in
