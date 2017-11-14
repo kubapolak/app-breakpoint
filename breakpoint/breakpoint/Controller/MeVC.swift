@@ -25,6 +25,7 @@ class MeVC: UIViewController {
     
     var myGroups = [Group]()
     var myFeedMessages = [String]()
+    var myGroupTitles = [String]()
     var myGroupMessages = [[String]]()
     
     override func viewDidLoad() {
@@ -77,9 +78,10 @@ class MeVC: UIViewController {
     func getMyGroupMessages() {
         DataService.instance.getAllGroups { (returnedGroups) in
             self.myGroups = returnedGroups
-            DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, finished) in
+            DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, returnedTitles, finished) in
                 if finished {
                     self.myGroupMessages = returnedGroupMessages
+                    self.myGroupTitles = returnedTitles
                     self.tableView.reloadData()
                 }
             })
@@ -141,6 +143,21 @@ extension MeVC: UITableViewDelegate, UITableViewDataSource {
             numOfSections = myGroupMessages.count
         }
         return numOfSections
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let headerTitle = view as?UITableViewHeaderFooterView {
+            headerTitle.textLabel?.textColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
+            headerTitle.backgroundView?.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var sectionHeader = ""
+        if myMsgsToggle.selectedSegmentIndex == 1 {
+            sectionHeader = myGroupTitles[section]
+        }
+        return sectionHeader
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

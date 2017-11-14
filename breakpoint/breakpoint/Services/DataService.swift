@@ -154,9 +154,12 @@ class DataService {
         }
     }
     
-    func getMyGroupMessages(_ groups: [Group], handler: @escaping (_ messageGroupsArray: [[String]], _ done: Bool) -> ()) {
+    func getMyGroupMessages(_ groups: [Group], handler: @escaping (_ messageGroupsArray: [[String]], _ groupTitles: [String], _ done: Bool) -> ()) {
         var messageGroupsArray = [[String]]()
+        var groupTitles = [String]()
         for group in groups {
+            let title = group.groupTitle
+            groupTitles.append(title)
             var messagesArray = [String]()
             REF_GROUPS.child(group.key).child("messages").observeSingleEvent(of: .value) { (groupMessageSnapshot) in
                 guard let groupMessageSnapshot = groupMessageSnapshot.children.allObjects as? [DataSnapshot] else { return }
@@ -169,7 +172,7 @@ class DataService {
                     }
                 messageGroupsArray.append(messagesArray.reversed())
                 if messageGroupsArray.count == groups.count {
-                    handler(messageGroupsArray, true)
+                    handler(messageGroupsArray, groupTitles, true)
                 }
             }
         }
