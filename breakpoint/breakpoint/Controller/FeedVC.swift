@@ -204,10 +204,12 @@ extension FeedVC: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "feedCell") as? FeedCell else { return UITableViewCell() }
         let message = messageArray[indexPath.row]
         let content = message.content
+        let time = message.time
         let image = feedAvatars[message.senderId]
         let email = usernameDict[message.senderId]
         let status = statusDict[message.senderId]
-        cell.configureCell(profileImage: image!, email: email!, content: content, status: status!)
+        
+        cell.configureCell(profileImage: image!, email: email!, content: content, status: status!, time: time)
         return cell
     }
 }

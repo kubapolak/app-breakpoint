@@ -35,6 +35,8 @@ class DataService {
         return _REF_FEED
     }
     
+    let dateFormatter = DateFormatter()
+    
     func createDBUser(uid: String, userData: Dictionary<String,Any>) {
         REF_USERS.child(uid).updateChildValues(userData)
     }
@@ -60,7 +62,8 @@ class DataService {
             REF_GROUPS.child(groupKey!).child("messages").childByAutoId().updateChildValues(["content": message, "senderId": uid])
             sendComplete(true)
         } else {
-            REF_FEED.childByAutoId().updateChildValues(["content": message, "senderId": uid])
+            let time = ServerValue.timestamp()
+            REF_FEED.childByAutoId().updateChildValues(["content": message, "senderId": uid, "time": time])
             sendComplete(true)
         }
     }
@@ -73,13 +76,37 @@ class DataService {
             for message in feedMessageSnapshot {
                 let content  = message.childSnapshot(forPath: "content").value as! String
                 let senderId = message.childSnapshot(forPath: "senderId").value as! String
+                var timeStr = ""
+                if let timeInt = message.childSnapshot(forPath: "time").value as? TimeInterval {
+                    timeStr = self.formatDate(timeInt)
+                }
                 
-                let message = Message(content: content, senderId: senderId)
+                let message = Message(content: content, senderId: senderId, time: timeStr)
                 messageArray.append(message)
             }
             
             handler(messageArray, true)
         }
+    }
+    
+    func formatDate(_ interval: TimeInterval) -> String {
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        let time = NSDate(timeIntervalSince1970: interval / 1000) as Date
+        let currentTime = Date()
+        let components = Calendar.current.dateComponents([.year, .month], from: time, to: currentTime)
+        if components.year! > 0 {
+            dateFormatter.dateFormat = "yyyy"
+        } else if components.month! > 1 {
+            dateFormatter.dateFormat = "MMMM"
+        } else if components.month! > 0 {
+            dateFormatter.dateFormat = "MMMM dd"
+        } else {
+            dateFormatter.dateFormat = "EEE yyyy, HH:mm"
+        }
+        let timeCheck = dateFormatter.string(from: time)
+        let timeFormatted = dateFormatter.date(from: timeCheck)
+        return dateFormatter.string(from: timeFormatted!)
     }
     
     func getAllMessagesFor(desiredGroup: Group, handler: @escaping (_ messagesArray: [Message]) -> ()) {
@@ -89,7 +116,8 @@ class DataService {
             for groupMessage in groupMessageSnapshot {
                 let content = groupMessage.childSnapshot(forPath: "content").value as! String
                 let senderId = groupMessage.childSnapshot(forPath: "senderId").value as! String
-                let groupMessage = Message(content: content, senderId: senderId)
+                let time = ""
+                let groupMessage = Message(content: content, senderId: senderId, time: time)
                 groupMessageArray.append(groupMessage)
             }
             handler(groupMessageArray)
