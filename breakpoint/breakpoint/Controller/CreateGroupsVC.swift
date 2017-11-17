@@ -42,20 +42,17 @@ class CreateGroupsVC: UIViewController {
         chosenUserArray = []
     }
     
-    func clearArrays(completion: @escaping (_ done: Bool) -> ()) {
+    func clearArrays() {
         emailArray = []
         idArray = []
         avatarArray = []
-        completion(true)
     }
     
     @objc func textFieldDidChange() {
+        clearArrays()
+        tableView.reloadData()
         if emailSearchTextField.text == "" {
-            clearArrays(completion: { (done) in
-                if done {
-                self.tableView.reloadData()
-                }
-            })
+            tableView.reloadData()
         } else {
             searchForUsers()
             }
@@ -63,24 +60,13 @@ class CreateGroupsVC: UIViewController {
     
     func searchForUsers() {
         let emailSearch = emailSearchTextField.text!
-        DispatchQueue.global(qos: .userInteractive).async {
             DataService.instance.getEmail(forSearchQuery: emailSearch, handler: { (returnedEmailArray) in
                     self.emailArray = returnedEmailArray
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
+                    self.idArray = returnedIds
+                        self.tableView.reloadData()
+                })
             })
-        }
-        
-        //                DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
-        //                        self.idArray = returnedIds
-        //                    DataService.instance.downloadMultipleAvatars(ids: self.idArray, handler: { (avatars) in
-        //                        DispatchQueue.main.async {
-        //                            self.avatarArray = avatars
-        //                            self.tableView.reloadData()
-        //                        }
-        //                    })
-        //                })
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
@@ -123,7 +109,15 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
             selected = false
         }
         cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: self.emailArray[indexPath.row], isSelected: selected)
-            //cell.configureCell(profileImage: self.avatarArray[indexPath.row], email: self.emailArray[indexPath.row], isSelected: selected)
+        DispatchQueue.global(qos: .background).async {
+            DataService.instance.downloadUserAvatar(userID: self.idArray[indexPath.row], handler: { (avatar, finished) in
+                if finished {
+                    DispatchQueue.main.async {
+                        cell.profileImage.image = avatar
+                    }
+                }
+            })
+        }
         return cell
     }
     

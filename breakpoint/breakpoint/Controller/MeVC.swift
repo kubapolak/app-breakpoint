@@ -40,6 +40,7 @@ class MeVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
+        clearArrays()
         setupView()
         getMyMessages()
     }
@@ -66,6 +67,14 @@ class MeVC: UIViewController {
             getMyGroupMessages()
             tableView.reloadData()
         }
+    }
+    
+    func clearArrays() {
+        myFeedMessages = []
+        myGroups = []
+        myGroupTitles = []
+        myGroupMessages = []
+        tableView.reloadData()
     }
     
     func getMyFeedMessages() {
