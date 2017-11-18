@@ -8,8 +8,9 @@
 
 import UIKit
 import Firebase
+import GoogleSignIn
 
-class AuthVC: UIViewController {
+class AuthVC: UIViewController, GIDSignInUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,11 +27,19 @@ class AuthVC: UIViewController {
     }
     
     @IBAction func googleSignInButtonPressed(_ sender: Any) {
+        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().signIn()
     }
     
     @IBAction func signInWithEmailButtonPressed(_ sender: Any) {
         let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginVC")
         present(loginVC!, animated: true, completion: nil)
+    }
+    
+    
+    @IBAction func signUpLocalPressed(_ sender: Any) {
+        let signUpVC = storyboard?.instantiateViewController(withIdentifier: "SignUpVC")
+        present(signUpVC!, animated: true, completion: nil)
     }
     
 }

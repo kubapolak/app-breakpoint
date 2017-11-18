@@ -105,6 +105,8 @@ class DataService {
             dateFormatter.dateFormat = "dd.MM, HH:mm"
         } else if components.day! > 0 {
             dateFormatter.dateFormat = "EEE, HH:mm"
+        } else if Calendar.current.isDateInYesterday(time) {
+            dateFormatter.dateFormat = "yesterday"
         } else {
             dateFormatter.dateFormat = "HH:mm"
         }
