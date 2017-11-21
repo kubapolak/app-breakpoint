@@ -16,7 +16,9 @@ class LoginVC: UIViewController {
     
     @IBOutlet weak var passwordField: InsetTextField!
     
-    @IBOutlet weak var wrongCredLabel: UILabel!
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    @IBOutlet weak var signInButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +27,17 @@ class LoginVC: UIViewController {
         passwordField.delegate = self
     }
     
-    func fadeOutLabel() {
+    func fadeOutLabel(withText text: String) {
+        signInButton.isEnabled = false
+        errorLabel.text = text
         UIView.animate(withDuration: 2, animations: {
-            self.wrongCredLabel.isHidden = false
-            self.wrongCredLabel.alpha = 0
+            self.errorLabel.isHidden = false
+            self.errorLabel.alpha = 0
         }) { (finished) in
             if finished {
-                self.wrongCredLabel.isHidden = true
-                self.wrongCredLabel.alpha = 1
+                self.errorLabel.isHidden = true
+                self.errorLabel.alpha = 1
+                self.signInButton.isEnabled = true
             }
         }
     }
@@ -40,17 +45,17 @@ class LoginVC: UIViewController {
     @IBAction func signInButtonPressed(_ sender: Any) {
         
 
-        if emailField.text != nil && passwordField.text != nil {
+        if emailField.text != "" && passwordField.text != "" {
             AuthService.instance.loginUser(withEmail: emailField.text!, andPassword: passwordField.text!, loginComplete: { (success, loginError) in
                 if success {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     print(String(describing: loginError?.localizedDescription))
-                    self.fadeOutLabel()
+                    self.fadeOutLabel(withText: (loginError?.localizedDescription)!)
                 }
             })
         } else {
-            
+            fadeOutLabel(withText: "fill out all the info")
         }
     }
     

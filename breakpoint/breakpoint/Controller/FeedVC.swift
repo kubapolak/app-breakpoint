@@ -31,6 +31,9 @@ class FeedVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
+        
         if #available(iOS 10.0, *) {
             tableView.refreshControl = refreshControl
         } else {
@@ -54,6 +57,27 @@ class FeedVC: UIViewController {
         if avatarsDownloaded {
             updateMessages()
             scrollToTop()
+        }
+    }
+    
+    @objc func userStatusDidChange(_ notif: Notification) {
+        guard let id = Auth.auth().currentUser?.uid else { return }
+        if idArray.contains(id) {
+            DataService.instance.getUserStatus(forUser: id) { (status) in
+                self.statusDict[id] = status
+            }
+        }
+    }
+    
+    @objc func userAvatarDidChange(_ notif: Notification) {
+        guard let id = Auth.auth().currentUser?.uid else { return }
+        if idArray.contains(id) {
+            DataService.instance.downloadUserAvatar(userID: id) { (avatar, finished) in
+                if finished {
+                    self.feedAvatars[id] = avatar
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
 
@@ -153,12 +177,17 @@ class FeedVC: UIViewController {
                 if finished {
                     self.getUserIds { (finished) in
                         if finished {
+                            var tempIds = self.idArray
                             for savedId in self.feedAvatars.keys {
                                 if self.idArray.contains(savedId) {
-                                    allUsersConfigured = true
-                                } else {
-                                    allUsersConfigured = false
+                                    let index = tempIds.index(of: savedId)
+                                    tempIds.remove(at: index!)
                                 }
+                            }
+                            if tempIds.count == 0 {
+                                allUsersConfigured = true
+                            } else {
+                                allUsersConfigured = false
                             }
                             if allUsersConfigured && self.idArray.count == self.feedAvatars.count {
                                 self.actSpinner.stopAnimating()
@@ -169,12 +198,22 @@ class FeedVC: UIViewController {
                                 
                                 self.tableView.reloadData()
                             } else {
-                                print("")
-                                print("user database update needed")
-                                print("UPDATING")
-                                print("")
-                                self.clearUserData()
-                                self.getMessages()
+                                self.getUserData(handler: { (finished) in
+                                })
+                                for id in tempIds {
+                                    DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, done) in
+                                        if done {
+                                            self.feedAvatars[id] = avatar
+                                            if self.feedAvatars.count == self.idArray.count {
+                                                self.avatarsDownloaded = true
+                                                self.actSpinner.stopAnimating()
+                                                self.actSpinner.isHidden = true
+                                                self.loadingLabel.isHidden = true
+                                                self.tableView.reloadData()
+                                            }
+                                        }
+                                    })
+                                }
                             }
                         }
                     }

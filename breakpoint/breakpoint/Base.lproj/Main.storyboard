@@ -1244,7 +1244,7 @@
                                     </textField>
                                 </subviews>
                             </stackView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wrong email or password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpQ-hW-X35">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="passwords must match" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lpQ-hW-X35">
                                 <rect key="frame" x="62" y="418" width="250" height="18.666666666666686"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="KB9-Vz-faa"/>
@@ -1270,9 +1270,10 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="RfZ-Pc-4Ps" id="cUU-AT-oke"/>
-                        <outlet property="emailTakenLabel" destination="lpQ-hW-X35" id="KlF-JU-uSB"/>
+                        <outlet property="errorLabel" destination="lpQ-hW-X35" id="KlF-JU-uSB"/>
                         <outlet property="passwordField" destination="JD1-Hb-AKM" id="ao4-Ms-2eY"/>
                         <outlet property="passwordRepeatField" destination="VQU-Ro-A9C" id="0TE-4S-6ng"/>
+                        <outlet property="signUpButton" destination="vdf-nX-Cri" id="KbO-fG-5Nt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qe9-X4-Nr2" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1342,7 +1343,7 @@
                                     </textField>
                                 </subviews>
                             </stackView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wrong email or password" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heS-54-Knv">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wrong email or password" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heS-54-Knv">
                                 <rect key="frame" x="62" y="368" width="250" height="18.666666666666686"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="u3L-1V-kAL"/>
@@ -1368,8 +1369,9 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="vAQ-sV-jvF" id="wj5-iJ-SNF"/>
+                        <outlet property="errorLabel" destination="heS-54-Knv" id="tr9-3w-cje"/>
                         <outlet property="passwordField" destination="O8H-17-hXh" id="B9S-LF-lbA"/>
-                        <outlet property="wrongCredLabel" destination="heS-54-Knv" id="tr9-3w-cje"/>
+                        <outlet property="signInButton" destination="j9E-Vx-FUU" id="Ozj-aA-JHh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pyk-GH-4UB" userLabel="First Responder" sceneMemberID="firstResponder"/>

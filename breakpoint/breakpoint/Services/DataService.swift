@@ -41,6 +41,10 @@ class DataService {
         REF_USERS.child(uid).updateChildValues(userData)
     }
     
+    func addThirdPartyUserInfo(id: String, username: String, provider: String) {
+        REF_USERS.child(id).updateChildValues(["email": username, "provider": provider])
+    }
+    
     func updateUserStatus(userStatus: String, handler: @escaping (_ statusUpdated: Bool) -> ()) {
         REF_USERS.child((Auth.auth().currentUser?.uid)!).updateChildValues(["status": userStatus])
         handler(true)

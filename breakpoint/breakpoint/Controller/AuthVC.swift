@@ -29,6 +29,7 @@ class AuthVC: UIViewController, GIDSignInUIDelegate {
     @IBAction func googleSignInButtonPressed(_ sender: Any) {
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().signIn()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func signInWithEmailButtonPressed(_ sender: Any) {

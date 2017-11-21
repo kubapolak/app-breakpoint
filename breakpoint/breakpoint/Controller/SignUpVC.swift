@@ -17,40 +17,55 @@ class SignUpVC: UIViewController {
     
     @IBOutlet weak var passwordRepeatField: InsetTextField!
     
-    @IBOutlet weak var emailTakenLabel: UILabel!
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    @IBOutlet weak var signUpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    func fadeOutLabel() {
+    func fadeOutLabel(withText text: String) {
+        signUpButton.isEnabled = false
+        errorLabel.text = text
         UIView.animate(withDuration: 2, animations: {
-            self.emailTakenLabel.isHidden = false
-            self.emailTakenLabel.alpha = 0
+            self.errorLabel.isHidden = false
+            self.errorLabel.alpha = 0
         }) { (finished) in
             if finished {
-                self.emailTakenLabel.isHidden = true
-                self.emailTakenLabel.alpha = 1
+                self.errorLabel.isHidden = true
+                self.errorLabel.alpha = 1
+                self.signUpButton.isEnabled = true
             }
         }
     }
     
     func register() {
-//        AuthService.instance.registerUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, userCreationComplete: { (success, registrationError) in
-            //                    if success {
-            //                        AuthService.instance.loginUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, loginComplete: { (success, nil) in
-            //                            NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)
-            //                            self.dismiss(animated: true, completion: nil)
-            //                            print("successfully registered user")
-            //                        })
-            //                    } else {
-            //                        print(String(describing: registrationError?.localizedDescription))
-            //                    }
-            //                })
+        AuthService.instance.registerUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, userCreationComplete: { (success, registrationError) in
+                                if success {
+                                    AuthService.instance.loginUser(withEmail: self.emailField.text!, andPassword: self.passwordField.text!, loginComplete: { (success, nil) in
+                                        NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)
+                                        self.dismiss(animated: true, completion: nil)
+                                        print("successfully registered user")
+                                    })
+                                } else {
+                                    print(String(describing: registrationError?.localizedDescription))
+                                    self.fadeOutLabel(withText: (registrationError?.localizedDescription)!)
+                                }
+                            })
     }
     
     
     @IBAction func signupButtonPressed(_ sender: Any) {
+        if emailField.text != "" && passwordField.text != "" && passwordRepeatField.text != "" {
+            if passwordField.text == passwordRepeatField.text {
+                register()
+            } else {
+                fadeOutLabel(withText: "passwords must match")
+            }
+        } else {
+            fadeOutLabel(withText: "fill out all required info")
+        }
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {

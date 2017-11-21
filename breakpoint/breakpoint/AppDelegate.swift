@@ -49,12 +49,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         guard let authentication = user.authentication else { return }
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
         
+//        let id = user.userID!
+//        let username = user.profile.email!
+//        DataService.instance.addThirdPartyUserInfo(id: id, username: username, provider: "Google")
+        
         Auth.auth().signIn(with: credential) { (user, error) in
             if let error = error {
                 print("error: \(error.localizedDescription)")
                 return
             } else {
                 print("user signed in")
+                let id = user?.uid
+                let username = user?.email!
+                let provider = user?.providerID
+                print("updating data...")
+                DataService.instance.addThirdPartyUserInfo(id: id!, username: username!, provider: provider!)
+                print("updated data")
             }
         }
     }
