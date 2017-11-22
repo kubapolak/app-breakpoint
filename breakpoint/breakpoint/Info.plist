@@ -26,9 +26,23 @@
 				<string>com.googleusercontent.apps.92709079747-378tlqe31gc6v53gm5ibb89tmdvuouhh</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb189624524918189</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>189624524918189</key>
+	<string>189624524918189</string>
+	<key>FacebookDisplayName</key>
+	<string>breakpoint</string>
+	<key>FacebookAppID</key>
+	<string>189624524918189</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import GoogleSignIn
+import FBSDKLoginKit
 
 class AuthVC: UIViewController, GIDSignInUIDelegate {
 
@@ -24,6 +25,13 @@ class AuthVC: UIViewController, GIDSignInUIDelegate {
     }
     
     @IBAction func facebookSignInButtonPressed(_ sender: Any) {
+        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile"], from: self) { (result, error) in
+            if error != nil {
+                print("FB login failed: \(error?.localizedDescription)")
+                return
+            }
+            print(result?.token.tokenString)
+        }
     }
     
     @IBAction func googleSignInButtonPressed(_ sender: Any) {
