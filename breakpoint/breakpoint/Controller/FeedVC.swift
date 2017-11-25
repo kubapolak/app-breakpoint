@@ -33,19 +33,13 @@ class FeedVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
-        
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.addSubview(refreshControl)
-        }
-        
-        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        refreshControl.tintColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
+
+        addPullToRefresh()
         
         if Auth.auth().currentUser != nil {
-        AuthService.instance.setupUserUI()
+            AuthService.instance.setupUserUI()
         }
+        
         loadingLabel.text = "loading feed..."
         avatarsDownloaded = false
         getMessages()
@@ -57,6 +51,9 @@ class FeedVC: UIViewController {
         if avatarsDownloaded {
             updateMessages()
             scrollToTop()
+        } else {
+            //getMessages()
+            //scrollToTop()
         }
     }
     
@@ -80,6 +77,13 @@ class FeedVC: UIViewController {
             }
         }
     }
+    
+    func addPullToRefresh() {
+        tableView.refreshControl = refreshControl
+        
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
+    }
 
     func scrollToTop() {
         if self.messageArray.count > 0 {
@@ -88,6 +92,7 @@ class FeedVC: UIViewController {
     }
     
     @objc private func refresh(_ sender: Any) {
+        loadingLabel.isHidden = false
         updateMessages()
         scrollToTop()
     }

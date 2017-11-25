@@ -1065,7 +1065,7 @@
                                                     <color key="titleColor" red="0.81338034561373806" green="1" blue="0.99959772383712964" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="facebookSignInButtonPressed:" destination="ASx-Ni-6ue" eventType="touchUpInside" id="TpT-zI-oOS"/>
+                                                    <action selector="facebookSignInButtonPressed:" destination="ASx-Ni-6ue" eventType="touchUpInside" id="Pi2-Hy-CX3"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="546-tb-Prt">
@@ -1164,6 +1164,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uPS-k7-yho"/>
                     </view>
+                    <connections>
+                        <outlet property="loginFBButton" destination="gNQ-5S-bEs" id="4fB-W8-Zfy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tD2-19-Z4w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
