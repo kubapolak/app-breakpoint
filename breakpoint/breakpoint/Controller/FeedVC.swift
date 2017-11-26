@@ -33,14 +33,13 @@ class FeedVC: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
-
-        addPullToRefresh()
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userDidJustLogin(_:)), name: NOTIF_USER_DID_LOGIN, object: nil)
         
+        addPullToRefresh()
         if Auth.auth().currentUser != nil {
             AuthService.instance.setupUserUI()
         }
         
-        loadingLabel.text = "loading feed..."
         avatarsDownloaded = false
         getMessages()
         scrollToTop()
@@ -51,9 +50,6 @@ class FeedVC: UIViewController {
         if avatarsDownloaded {
             updateMessages()
             scrollToTop()
-        } else {
-            //getMessages()
-            //scrollToTop()
         }
     }
     
@@ -72,10 +68,17 @@ class FeedVC: UIViewController {
             DataService.instance.downloadUserAvatar(userID: id) { (avatar, finished) in
                 if finished {
                     self.feedAvatars[id] = avatar
-                    self.tableView.reloadData()
                 }
             }
         }
+    }
+    
+    @objc func userDidJustLogin(_ notif: Notification) {
+        print("user just logged in!")
+        clearUserData()
+        AuthService.instance.setupUserUI()
+        getMessages()
+        scrollToTop()
     }
     
     func addPullToRefresh() {
@@ -133,6 +136,7 @@ class FeedVC: UIViewController {
         actSpinner.isHidden = false
         actSpinner.startAnimating()
         loadingLabel.isHidden = false
+        DispatchQueue.global(qos: .utility).async {
         DataService.instance.getAllFeedMessages { (returnedMessagesArray, finished) in
             if returnedMessagesArray.count > 0 {
             self.messageArray = returnedMessagesArray.reversed()
@@ -140,20 +144,13 @@ class FeedVC: UIViewController {
                 self.getUserIds(handler: { (finished) in
                     if finished {
                         self.getUserData(handler: { (finished) in
-                            for id in self.idArray {
-                            DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, done) in
-                                if done {
-                                    self.feedAvatars[id] = avatar
-                                    if self.feedAvatars.count == self.idArray.count {
-                                        self.avatarsDownloaded = true
-                                        self.actSpinner.stopAnimating()
-                                        self.actSpinner.isHidden = true
-                                        self.loadingLabel.isHidden = true
-                                        self.tableView.reloadData()
-                                    }
-                                }
-                            })
+                            self.actSpinner.stopAnimating()
+                            self.actSpinner.isHidden = true
+                            self.loadingLabel.isHidden = true
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
                             }
+
                         })
                     }
                 })
@@ -166,6 +163,7 @@ class FeedVC: UIViewController {
                 return
             }
         }
+        }
     }
     
     func updateMessages()  {
@@ -176,6 +174,7 @@ class FeedVC: UIViewController {
         loadingLabel.isHidden = false
         var allUsersConfigured = false
         
+        DispatchQueue.global(qos: .utility).async {
         DataService.instance.getAllFeedMessages { (returnedMessagesArray, finished) in
             if returnedMessagesArray.count > 0 {
                 self.messageArray = returnedMessagesArray.reversed()
@@ -214,7 +213,9 @@ class FeedVC: UIViewController {
                                                 self.actSpinner.stopAnimating()
                                                 self.actSpinner.isHidden = true
                                                 self.loadingLabel.isHidden = true
-                                                self.tableView.reloadData()
+                                                DispatchQueue.main.async {
+                                                    self.tableView.reloadData()
+                                                }
                                             }
                                         }
                                     })
@@ -232,6 +233,7 @@ class FeedVC: UIViewController {
                 return
             }
         }
+        }
     }
 }
 
@@ -246,14 +248,34 @@ extension FeedVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "feedCell") as? FeedCell else { return UITableViewCell() }
+        
         let message = messageArray[indexPath.row]
         let content = message.content
         let time = message.time
-        let image = feedAvatars[message.senderId]
-        let email = usernameDict[message.senderId]
-        let status = statusDict[message.senderId]
+        let tempImage = UIImage(named: "defaultProfileImage")
+        let id = message.senderId
+        let email = usernameDict[id]
+        let status = statusDict[id]
         
-        cell.configureCell(profileImage: image!, email: email!, content: content, status: status!, time: time)
+        cell.configureCell(profileImage: tempImage!, email: email!, content: content, status: status!, time: time)
+        if let cacheAvatar = feedAvatars[id] {
+            cell.profileImg.image = cacheAvatar
+        } else {
+        DispatchQueue.global(qos: .utility).async {
+            DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, finished) in
+                if finished {
+                    self.feedAvatars[id] = avatar
+                    DispatchQueue.main.async {
+                        cell.profileImg.image = avatar
+                    }
+                    if self.feedAvatars.count == self.idArray.count {
+                        self.avatarsDownloaded = true
+                        print("all \(self.feedAvatars.count) avatars downloaded")
+                    }
+                }
+            })
+        }
+        }
         return cell
     }
 }

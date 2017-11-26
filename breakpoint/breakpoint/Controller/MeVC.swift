@@ -37,10 +37,9 @@ class MeVC: UIViewController {
         setupView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.emailLbl.text = Auth.auth().currentUser?.email
-        clearArrays()
         setupView()
         getMyMessages()
     }
@@ -60,13 +59,11 @@ class MeVC: UIViewController {
     }
     
     func getMyMessages() {
-        if myMsgsToggle.selectedSegmentIndex == 0 {
-            getMyFeedMessages()
-            tableView.reloadData()
-        } else if myMsgsToggle.selectedSegmentIndex == 1 {
-            getMyGroupMessages()
-            tableView.reloadData()
-        }
+            if self.myMsgsToggle.selectedSegmentIndex == 0 {
+                self.getMyFeedMessages()
+            } else if self.myMsgsToggle.selectedSegmentIndex == 1 {
+                self.getMyGroupMessages()
+            }
     }
     
     func clearArrays() {
@@ -78,22 +75,30 @@ class MeVC: UIViewController {
     }
     
     func getMyFeedMessages() {
+        DispatchQueue.global(qos: .utility).async {
         DataService.instance.getMyFeedMessages { (returnedMessages) in
             self.myFeedMessages = returnedMessages
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
         }
     }
     
     func getMyGroupMessages() {
+        DispatchQueue.global(qos: .utility).async {
         DataService.instance.getAllGroups { (returnedGroups) in
             self.myGroups = returnedGroups
             DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, returnedTitles, finished) in
                 if finished {
                     self.myGroupMessages = returnedGroupMessages
                     self.myGroupTitles = returnedTitles
-                    self.tableView.reloadData()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             })
+        }
         }
     }
     
@@ -115,6 +120,10 @@ class MeVC: UIViewController {
         let logoutAction = UIAlertAction(title: "logout", style: .destructive) { (buttonTapped) in
             do {
                try Auth.auth().signOut()
+                self.clearArrays()
+                self.emailLbl.text = ""
+                self.statusLabel.text = ""
+                self.profileImage.image = UIImage(named: "defaultProfileImage")
                 let authVC = self.storyboard?.instantiateViewController(withIdentifier: "AuthVC") as? AuthVC
                 self.present(authVC!, animated: true, completion: nil)
             } catch {
@@ -125,7 +134,7 @@ class MeVC: UIViewController {
         logoutPopup.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: nil))
         present(logoutPopup, animated: true, completion: nil)
         AuthService.avatar = UIImage(named: "defaultProfileImage")
-        AuthService.status = String()
+        AuthService.status = ""
     }
     
     @IBAction func setStatusButtonPressed(_ sender: Any) {

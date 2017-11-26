@@ -97,24 +97,28 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("")
+
         return emailArray.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserCell else { return UITableViewCell() }
-        
         var selected = Bool()
-        if chosenUserArray.contains(cell.emailLabel.text!) {
+        print("creating cell; selected: \(selected)")
+
+        let mail = self.emailArray[indexPath.row]
+        if chosenUserArray.contains(mail) {
             selected = true
         } else {
             selected = false
         }
-        cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: self.emailArray[indexPath.row], isSelected: selected)
-        DispatchQueue.global(qos: .background).async {
+        print("configuring cell; selected: \(selected)")
+
+        cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: mail, isSelected: selected)
+        DispatchQueue.global(qos: .utility).async {
             DataService.instance.downloadUserAvatar(userID: self.idArray[indexPath.row], handler: { (avatar, finished) in
                 if finished {
-                    DispatchQueue.main.async {
                         cell.profileImage.image = avatar
-                    }
                 }
             })
         }

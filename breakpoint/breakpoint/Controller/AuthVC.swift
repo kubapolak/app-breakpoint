@@ -51,7 +51,7 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
                 let id = user?.uid
                 let username = user?.email!
                 DataService.instance.addThirdPartyUserInfo(id: id!, username: username!, provider: "Google")
-                AuthService.instance.setupUserUI()
+                NotificationCenter.default.post(name: NOTIF_USER_DID_LOGIN, object: nil)
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -67,25 +67,6 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
     
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        
-//            if error != nil {
-//                print("FB login failed: \(error?.localizedDescription)")
-//                return
-//            } else {
-//        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile"], from: self) { (result, error) in
-//            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString!)
-//            Auth.auth().signIn(with: credential) { (user, error) in
-//                if let error = error {
-//                    print("error: \(error)")
-//                    return
-//                }
-//                print("user signed in with FB!")
-//                DataService.instance.addThirdPartyUserInfo(id: (user?.uid)!, username: (user?.email)!, provider: "Facebook")
-//                AuthService.instance.setupUserUI()
-//                self.dismiss(animated: true, completion: nil)
-//            }
-//        }
-//        }
     }
     
     @IBAction func facebookSignInButtonPressed(_ sender: Any) {
@@ -93,8 +74,21 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
             if error != nil {
                 print("FB LOGIN FAILED!")
                 return
+            } else if (result?.isCancelled)! {
+                print("FB LOGIN CANCELLED")
+                return
             }
-            print(result?.token.tokenString)
+            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString!)
+            Auth.auth().signIn(with: credential, completion: { (user, error) in
+                if let error = error {
+                    print("error, couldnt sign in with firebase: \(error.localizedDescription)")
+                    return
+                }
+                print("signed to firebase with FB cred!")
+                DataService.instance.addThirdPartyUserInfo(id: (user?.uid)!, username: (user?.email)!, provider: "Facebook")
+                self.dismiss(animated: true, completion: nil)
+                NotificationCenter.default.post(name: NOTIF_USER_DID_LOGIN, object: nil)
+            })
         }
     }
     

@@ -10,7 +10,6 @@ import UIKit
 
 class GroupsVC: UIViewController {
     
-    
     @IBOutlet weak var groupsTableView: UITableView!
     
     var groupsArray = [Group]()
@@ -19,17 +18,24 @@ class GroupsVC: UIViewController {
         super.viewDidLoad()
         groupsTableView.delegate = self
         groupsTableView.dataSource = self
-        DataService.instance.REF_GROUPS.observe(.value) { (snapshot) in
-            DataService.instance.getAllGroups { (returnedGroupsArray) in
-                self.groupsArray = returnedGroupsArray
-                self.groupsTableView.reloadData()
+    }
+    
+    func getGroups() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            DataService.instance.REF_GROUPS.observe(.value) { (snapshot) in
+                DataService.instance.getAllGroups { (returnedGroupsArray) in
+                    self.groupsArray = returnedGroupsArray
+                    DispatchQueue.main.async {
+                        self.groupsTableView.reloadData()
+                    }
+                }
             }
         }
     }
     
     override func viewWillAppear (_ animated: Bool) {
         super.viewWillAppear(animated)
-        groupsTableView.reloadData()
+        getGroups()
     }
 }
 

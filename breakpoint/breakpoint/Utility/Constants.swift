@@ -12,3 +12,4 @@ import Foundation
 
 let NOTIF_STATUS_DID_CHANGE = Notification.Name("notifStatusChanged")
 let NOTIF_AVATAR_DID_CHANGE = Notification.Name("notifAvatarChanged")
+let NOTIF_USER_DID_LOGIN = Notification.Name("notifUserJustLoggedIn")
