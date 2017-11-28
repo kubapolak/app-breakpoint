@@ -15,6 +15,7 @@ class AuthService {
     static var avatar = UIImage(named: "defaultProfileImage")
     static var status = String()
     
+    //register user with Firebase
     func registerUser(withEmail email: String, andPassword password: String, userCreationComplete: @escaping (_ status: Bool, _ error: Error?) -> ()) {
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             guard let user = user else {
@@ -28,7 +29,8 @@ class AuthService {
         }
     }
     
-        func loginUser(withEmail email: String, andPassword password: String, loginComplete: @escaping (_ status: Bool, _ error: Error?) -> ()) {
+    //login user with Firebase
+    func loginUser(withEmail email: String, andPassword password: String, loginComplete: @escaping (_ status: Bool, _ error: Error?) -> ()) {
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
                 if error != nil {
                     loginComplete(false, error)
@@ -39,6 +41,7 @@ class AuthService {
         }
     }
     
+    //get user avatar and status to be accessed across the app
     func setupUserUI() {
         DispatchQueue.global(qos: .userInitiated).async {
             DataService.instance.downloadUserAvatar(userID: (Auth.auth().currentUser?.uid)!) { (userAvatar, finished) in
@@ -47,7 +50,7 @@ class AuthService {
                     NotificationCenter.default.post(name: NOTIF_AVATAR_DID_CHANGE, object: nil)
                 }
             }
-            DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
+            DataService.instance.getStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
                 AuthService.status = userStatus
                 NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)
             }

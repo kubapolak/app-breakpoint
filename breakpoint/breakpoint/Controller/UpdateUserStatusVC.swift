@@ -22,7 +22,7 @@ class UpdateUserStatusVC: UIViewController {
     
     func setupView() {
         
-        DataService.instance.getUserStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
+        DataService.instance.getStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
             
             if userStatus == "casual" {
             self.statusSwitch.selectedSegmentIndex = 0
@@ -50,7 +50,7 @@ class UpdateUserStatusVC: UIViewController {
             updatedStatus = "nerd"
         }
         AuthService.status = updatedStatus
-        DataService.instance.updateUserStatus(userStatus: updatedStatus) { (updated) in
+        DataService.instance.updateUserStatus(updatedStatus) { (updated) in
             if updated {
                 NotificationCenter.default.post(name: NOTIF_STATUS_DID_CHANGE, object: nil)
                 self.dismiss(animated: true, completion: nil)

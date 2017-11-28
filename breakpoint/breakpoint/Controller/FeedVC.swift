@@ -22,41 +22,38 @@ class FeedVC: UIViewController {
     var messageArray = [Message]()
     var usernameDict = [String: String]()
     var idArray = [String]()
+    var tempIdArray = [String]()
     var feedAvatars = [String: UIImage]()
     var statusDict = [String: String]()
-    var avatarsDownloaded = Bool()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userDidJustLogin(_:)), name: NOTIF_USER_DID_LOGIN, object: nil)
-        
         addPullToRefresh()
+        addObservers()
+        
         if Auth.auth().currentUser != nil {
             AuthService.instance.setupUserUI()
         }
-        
-        avatarsDownloaded = false
-        getMessages()
-        scrollToTop()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if avatarsDownloaded {
-            updateMessages()
-            scrollToTop()
-        }
+        getMessages()
+    }
+    
+    func addObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
     }
     
     @objc func userStatusDidChange(_ notif: Notification) {
         guard let id = Auth.auth().currentUser?.uid else { return }
         if idArray.contains(id) {
-            DataService.instance.getUserStatus(forUser: id) { (status) in
+            DataService.instance.getStatus(forUser: id) { (status) in
                 self.statusDict[id] = status
             }
         }
@@ -73,31 +70,16 @@ class FeedVC: UIViewController {
         }
     }
     
-    @objc func userDidJustLogin(_ notif: Notification) {
-        print("user just logged in!")
-        clearUserData()
-        AuthService.instance.setupUserUI()
-        getMessages()
-        scrollToTop()
-    }
-    
     func addPullToRefresh() {
         tableView.refreshControl = refreshControl
         
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         refreshControl.tintColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
     }
-
-    func scrollToTop() {
-        if self.messageArray.count > 0 {
-            tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
-        }
-    }
     
     @objc private func refresh(_ sender: Any) {
         loadingLabel.isHidden = false
-        updateMessages()
-        scrollToTop()
+        getMessages()
     }
     
     func clearUserData() {
@@ -106,26 +88,29 @@ class FeedVC: UIViewController {
         idArray = []
         feedAvatars = [:]
         statusDict = [:]
-        avatarsDownloaded = false
     }
     
     func getUserIds(handler: @escaping (_ done: Bool) -> ()) {
+        tempIdArray = []
         for message in self.messageArray {
-            self.idArray.append(message.senderId)
+            let id = message.senderId
+            if !self.idArray.contains(id) {
+                self.idArray.append(id)
+                self.tempIdArray.append(id)
+            }
         }
-        self.idArray = Array(Set(self.idArray))
         handler(true)
     }
     
     func getUserData(handler: @escaping (_ done: Bool) -> ()) {
-        for id in idArray {
-        DataService.instance.getUserStatus(forUser: id, handler: { (status) in
-            self.statusDict["\(id)"] = status
+        for id in tempIdArray {
+            DataService.instance.getStatus(forUser: id, handler: { (status) in
+                self.statusDict["\(id)"] = status
             })
-        DataService.instance.getUsername(forUID: id, handler: { (username) in
-            self.usernameDict["\(id)"] = username
-            if self.usernameDict.count == self.idArray.count {
-                handler(true)
+            DataService.instance.getUsername(forUID: id, handler: { (username) in
+                self.usernameDict["\(id)"] = username
+                if self.usernameDict.count == self.idArray.count {
+                    handler(true)
                 }
             })
         }
@@ -143,15 +128,27 @@ class FeedVC: UIViewController {
             if finished {
                 self.getUserIds(handler: { (finished) in
                     if finished {
-                        self.getUserData(handler: { (finished) in
+                        if self.idArray.count == self.usernameDict.count {
                             self.actSpinner.stopAnimating()
                             self.actSpinner.isHidden = true
                             self.loadingLabel.isHidden = true
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
+                                self.tableView.refreshControl?.endRefreshing()
                             }
-
-                        })
+                        } else {
+                            self.getUserData(handler: { (finished) in
+                                if finished {
+                                self.actSpinner.stopAnimating()
+                                self.actSpinner.isHidden = true
+                                self.loadingLabel.isHidden = true
+                                DispatchQueue.main.async {
+                                    self.tempIdArray = self.idArray
+                                    self.tableView.reloadData()
+                                }
+                                }
+                            })
+                        }
                     }
                 })
                 }
@@ -166,75 +163,6 @@ class FeedVC: UIViewController {
         }
     }
     
-    func updateMessages()  {
-        loadingLabel.text = "updating..."
-        noMessagesLabel.isHidden = true
-        actSpinner.isHidden = false
-        actSpinner.startAnimating()
-        loadingLabel.isHidden = false
-        var allUsersConfigured = false
-        
-        DispatchQueue.global(qos: .utility).async {
-        DataService.instance.getAllFeedMessages { (returnedMessagesArray, finished) in
-            if returnedMessagesArray.count > 0 {
-                self.messageArray = returnedMessagesArray.reversed()
-                if finished {
-                    self.getUserIds { (finished) in
-                        if finished {
-                            var tempIds = self.idArray
-                            for savedId in self.feedAvatars.keys {
-                                if self.idArray.contains(savedId) {
-                                    let index = tempIds.index(of: savedId)
-                                    tempIds.remove(at: index!)
-                                }
-                            }
-                            if tempIds.count == 0 {
-                                allUsersConfigured = true
-                            } else {
-                                allUsersConfigured = false
-                            }
-                            if allUsersConfigured && self.idArray.count == self.feedAvatars.count {
-                                self.actSpinner.stopAnimating()
-                                self.actSpinner.isHidden = true
-                                self.loadingLabel.isHidden = true
-                                
-                                self.refreshControl.endRefreshing()
-                                
-                                self.tableView.reloadData()
-                            } else {
-                                self.getUserData(handler: { (finished) in
-                                })
-                                for id in tempIds {
-                                    DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, done) in
-                                        if done {
-                                            self.feedAvatars[id] = avatar
-                                            if self.feedAvatars.count == self.idArray.count {
-                                                self.avatarsDownloaded = true
-                                                self.actSpinner.stopAnimating()
-                                                self.actSpinner.isHidden = true
-                                                self.loadingLabel.isHidden = true
-                                                DispatchQueue.main.async {
-                                                    self.tableView.reloadData()
-                                                }
-                                            }
-                                        }
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-            } else {
-                self.actSpinner.stopAnimating()
-                self.actSpinner.isHidden = true
-                self.loadingLabel.isHidden = true
-                self.noMessagesLabel.isHidden = false
-                return
-            }
-        }
-        }
-    }
 }
 
 extension FeedVC: UITableViewDelegate, UITableViewDataSource {
@@ -258,23 +186,20 @@ extension FeedVC: UITableViewDelegate, UITableViewDataSource {
         let status = statusDict[id]
         
         cell.configureCell(profileImage: tempImage!, email: email!, content: content, status: status!, time: time)
+        
         if let cacheAvatar = feedAvatars[id] {
             cell.profileImg.image = cacheAvatar
         } else {
-        DispatchQueue.global(qos: .utility).async {
-            DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, finished) in
-                if finished {
-                    self.feedAvatars[id] = avatar
-                    DispatchQueue.main.async {
-                        cell.profileImg.image = avatar
+            DispatchQueue.global(qos: .background).async {
+                DataService.instance.downloadUserAvatar(userID: id, handler: { (avatar, finished) in
+                    if finished {
+                        self.feedAvatars[id] = avatar
+                        DispatchQueue.main.async {
+                            cell.profileImg.image = avatar
+                        }
                     }
-                    if self.feedAvatars.count == self.idArray.count {
-                        self.avatarsDownloaded = true
-                        print("all \(self.feedAvatars.count) avatars downloaded")
-                    }
-                }
-            })
-        }
+                })
+            }
         }
         return cell
     }

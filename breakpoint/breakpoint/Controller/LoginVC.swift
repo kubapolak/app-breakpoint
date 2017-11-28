@@ -48,8 +48,8 @@ class LoginVC: UIViewController {
         if emailField.text != "" && passwordField.text != "" {
             AuthService.instance.loginUser(withEmail: emailField.text!, andPassword: passwordField.text!, loginComplete: { (success, loginError) in
                 if success {
+                    AuthService.instance.setupUserUI()
                     self.dismiss(animated: true, completion: nil)
-                    NotificationCenter.default.post(name: NOTIF_USER_DID_LOGIN, object: nil)
                 } else {
                     print(String(describing: loginError?.localizedDescription))
                     self.fadeOutLabel(withText: (loginError?.localizedDescription)!)

@@ -76,29 +76,29 @@ class MeVC: UIViewController {
     
     func getMyFeedMessages() {
         DispatchQueue.global(qos: .utility).async {
-        DataService.instance.getMyFeedMessages { (returnedMessages) in
-            self.myFeedMessages = returnedMessages
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
+            DataService.instance.getMyFeedMessages { (returnedMessages) in
+                self.myFeedMessages = returnedMessages
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
-        }
         }
     }
     
     func getMyGroupMessages() {
         DispatchQueue.global(qos: .utility).async {
-        DataService.instance.getAllGroups { (returnedGroups) in
-            self.myGroups = returnedGroups
-            DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, returnedTitles, finished) in
-                if finished {
-                    self.myGroupMessages = returnedGroupMessages
-                    self.myGroupTitles = returnedTitles
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
+            DataService.instance.getAllGroups { (returnedGroups) in
+                self.myGroups = returnedGroups
+                DataService.instance.getMyGroupMessages(self.myGroups, handler: { (returnedGroupMessages, returnedTitles, finished) in
+                    if finished {
+                        self.myGroupMessages = returnedGroupMessages
+                        self.myGroupTitles = returnedTitles
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
         }
     }
     

@@ -47,11 +47,10 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
                 print("error: \(error.localizedDescription)")
                 return
             } else {
-                print("user signed in")
                 let id = user?.uid
                 let username = user?.email!
                 DataService.instance.addThirdPartyUserInfo(id: id!, username: username!, provider: "Google")
-                NotificationCenter.default.post(name: NOTIF_USER_DID_LOGIN, object: nil)
+                AuthService.instance.setupUserUI()
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -84,10 +83,9 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
                     print("error, couldnt sign in with firebase: \(error.localizedDescription)")
                     return
                 }
-                print("signed to firebase with FB cred!")
                 DataService.instance.addThirdPartyUserInfo(id: (user?.uid)!, username: (user?.email)!, provider: "Facebook")
                 self.dismiss(animated: true, completion: nil)
-                NotificationCenter.default.post(name: NOTIF_USER_DID_LOGIN, object: nil)
+                AuthService.instance.setupUserUI()
             })
         }
     }
