@@ -8,6 +8,7 @@
 
 import UIKit
 
+//Main Feed message cell
 class FeedCell: UITableViewCell {
     
     @IBOutlet weak var profileImg: UIImageView!
@@ -25,6 +26,7 @@ class FeedCell: UITableViewCell {
         self.emailLbl.text = email
         self.contentLabel.text = content
         self.timeLabel.text = time
+        //setting status label depending on whether the user has declared a status
         if status != "" {
         self.statusLabel.text = "-\(status)"
         } else {

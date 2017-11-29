@@ -8,6 +8,7 @@
 
 import UIKit
 
+//User's groups explorer
 class GroupsVC: UIViewController {
     
     @IBOutlet weak var groupsTableView: UITableView!

@@ -11,20 +11,12 @@ import Firebase
 import GoogleSignIn
 import FBSDKLoginKit
 
-class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate {
+//Initial authentication/login view
+class AuthVC: UIViewController, GIDSignInUIDelegate {
     
-    @IBOutlet weak var loginFBButton: FBSDKLoginButton!
-    
-    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
-        print("logged out")
-    }
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self as GIDSignInDelegate
+        NotificationCenter.default.addObserver(self, selector: #selector(AuthVC.userDidLogin(_:)), name: NOTIF_USER_DID_LOGIN, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -34,60 +26,13 @@ class AuthVC: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLog
         }
     }
     
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print("error: \(error.localizedDescription)")
-            return
-        }
-        
-        guard let authentication = user.authentication else { return }
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
-        Auth.auth().signIn(with: credential) { (user, error) in
-            if let error = error {
-                print("error: \(error.localizedDescription)")
-                return
-            } else {
-                let id = user?.uid
-                let username = user?.email!
-                DataService.instance.addThirdPartyUserInfo(id: id!, username: username!, provider: "Google")
-                AuthService.instance.setupUserUI()
-                self.dismiss(animated: true, completion: nil)
-            }
-        }
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print("error: \(error.localizedDescription)")
-            return
-        }
-        print("DISCONNECTED")
-    }
-    
-    
-    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+    @objc func userDidLogin(_ notif: Notification) {
+        print("DONE")
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func facebookSignInButtonPressed(_ sender: Any) {
-        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile"], from: self) { (result, error) in
-            if error != nil {
-                print("FB LOGIN FAILED!")
-                return
-            } else if (result?.isCancelled)! {
-                print("FB LOGIN CANCELLED")
-                return
-            }
-            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString!)
-            Auth.auth().signIn(with: credential, completion: { (user, error) in
-                if let error = error {
-                    print("error, couldnt sign in with firebase: \(error.localizedDescription)")
-                    return
-                }
-                DataService.instance.addThirdPartyUserInfo(id: (user?.uid)!, username: (user?.email)!, provider: "Facebook")
-                self.dismiss(animated: true, completion: nil)
-                AuthService.instance.setupUserUI()
-            })
-        }
+        AuthService.instance.loginUserWithFB()
     }
     
     @IBAction func googleSignInButtonPressed(_ sender: Any) {

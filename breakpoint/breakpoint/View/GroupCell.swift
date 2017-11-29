@@ -8,6 +8,7 @@
 
 import UIKit
 
+//displayed when looking at user's groups
 class GroupCell: UITableViewCell {
 
     @IBOutlet weak var groupTitleLabel: UILabel!
@@ -15,7 +16,6 @@ class GroupCell: UITableViewCell {
     @IBOutlet weak var groupDescriptionLabel: UILabel!
     
     @IBOutlet weak var numberCountLabel: UILabel!
-    
     
     func configureCell(title: String, description: String, memberCount: Int) {
         self.groupTitleLabel.text = title.lowercased()

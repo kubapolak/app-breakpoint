@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//Creating a chat group
 class CreateGroupsVC: UIViewController {
 
     @IBOutlet weak var titleTextField: InsetTextField!
@@ -104,7 +105,6 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserCell else { return UITableViewCell() }
         var selected = Bool()
-        print("creating cell; selected: \(selected)")
 
         let mail = self.emailArray[indexPath.row]
         if chosenUserArray.contains(mail) {
@@ -112,7 +112,6 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
         } else {
             selected = false
         }
-        print("configuring cell; selected: \(selected)")
 
         cell.configureCell(profileImage: UIImage(named: "defaultProfileImage")!, email: mail, isSelected: selected)
         DispatchQueue.global(qos: .utility).async {

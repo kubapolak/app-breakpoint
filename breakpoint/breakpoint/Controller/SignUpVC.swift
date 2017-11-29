@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//Signing up as a Firebase User
 class SignUpVC: UIViewController {
 
     @IBOutlet weak var emailField: InsetTextField!

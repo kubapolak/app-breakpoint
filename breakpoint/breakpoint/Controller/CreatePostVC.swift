@@ -9,9 +9,9 @@
 import UIKit
 import Firebase
 
+//Adding a Main Feed post
 class CreatePostVC: UIViewController {
 
-    
     @IBOutlet weak var profileImage: UIImageView!
     
     @IBOutlet weak var emailLabel: UILabel!

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//Logging in with email as a Firebase User
 class LoginVC: UIViewController {
 
     

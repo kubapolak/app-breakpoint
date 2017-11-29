@@ -8,6 +8,7 @@
 
 import UIKit
 
+//group feed message cell
 class GroupFeedCell: UITableViewCell {
 
     @IBOutlet weak var profileImg: UIImageView!

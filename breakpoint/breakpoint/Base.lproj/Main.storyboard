@@ -1128,7 +1128,7 @@
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOX-6y-Xmf">
                                                 <rect key="frame" x="0.0" y="45" width="303" height="35"/>
-                                                <state key="normal" title="sign up locally">
+                                                <state key="normal" title="sign up with email">
                                                     <color key="titleColor" red="0.81338034560000005" green="1" blue="0.9995977238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
@@ -1164,9 +1164,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uPS-k7-yho"/>
                     </view>
-                    <connections>
-                        <outlet property="loginFBButton" destination="gNQ-5S-bEs" id="4fB-W8-Zfy"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tD2-19-Z4w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1209,7 +1206,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gus-l1-VHY">
                                 <rect key="frame" x="20" y="104" width="335" height="171"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="local sign up" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VbB-Kj-bRE">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sign up" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VbB-Kj-bRE">
                                         <rect key="frame" x="0.0" y="0.0" width="335" height="21"/>
                                         <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="18"/>
                                         <color key="textColor" red="0.86012848980000001" green="0.032193786029999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

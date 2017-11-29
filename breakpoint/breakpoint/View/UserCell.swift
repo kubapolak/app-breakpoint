@@ -8,6 +8,7 @@
 
 import UIKit
 
+//user info cell when searching for new group members
 class UserCell: UITableViewCell {
 
     @IBOutlet weak var profileImage: UIImageView!
@@ -16,15 +17,10 @@ class UserCell: UITableViewCell {
     
     @IBOutlet weak var checkImage: UIImageView!
     
-    var showing = false
-    
-    func configureAvatar(avatar: UIImage) {
-        self.profileImage.image = avatar
-    }
-    
     func configureCell(profileImage image: UIImage, email: String, isSelected: Bool) {
         self.profileImage.image = image
         self.emailLabel.text = email
+        //checking if the user has already been selected when reusing cells
         if isSelected {
             self.checkImage.isHidden = false
         } else {
@@ -32,16 +28,15 @@ class UserCell: UITableViewCell {
         }
     }
     
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
+        //adding or removing the checkmark
         if selected {
-         if checkImage.isHidden {
-            checkImage.isHidden = false
-         } else {
-            checkImage.isHidden = true
-        }
+            if checkImage.isHidden {
+                checkImage.isHidden = false
+            } else {
+                checkImage.isHidden = true
+            }
         }
     }
 }

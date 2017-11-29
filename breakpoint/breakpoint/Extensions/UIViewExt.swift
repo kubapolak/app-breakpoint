@@ -8,6 +8,7 @@
 
 import UIKit
 
+//binding of message text field to keyboard
 extension UIView {
     
     func bindToKeyboard() {

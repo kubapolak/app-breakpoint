@@ -8,6 +8,7 @@
 
 import UIKit
 
+//custom shadow for AuthVC login buttons box
 class ShadowView: UIView {
     
     override func awakeFromNib() {

@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//User's profile overview/manager
 class MeVC: UIViewController {
 
     @IBOutlet weak var profileImage: UIImageView!

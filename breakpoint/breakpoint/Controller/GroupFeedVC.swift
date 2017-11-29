@@ -9,9 +9,9 @@
 import UIKit
 import Firebase
 
+//Group Feed
 class GroupFeedVC: UIViewController {
 
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var groupTitleLabel: UILabel!
     @IBOutlet weak var membersLabel: UILabel!

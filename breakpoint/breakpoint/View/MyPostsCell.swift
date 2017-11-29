@@ -8,6 +8,7 @@
 
 import UIKit
 
+//message cell while viewing own messages in MeVC, content only
 class MyPostsCell: UITableViewCell {
 
     @IBOutlet weak var contentLabel: UILabel!
@@ -15,5 +16,4 @@ class MyPostsCell: UITableViewCell {
     func configureCell(withContent content: String) {
         self.contentLabel.text = content
     }
-
 }

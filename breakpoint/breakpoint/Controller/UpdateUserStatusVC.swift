@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//Updating user's status
 class UpdateUserStatusVC: UIViewController {
 
     @IBOutlet weak var bgView: UIView!

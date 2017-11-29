@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 
+//Adding an avatar
 class AddPhotoVC: UIViewController {
 
     @IBOutlet weak var bgView: UIView!

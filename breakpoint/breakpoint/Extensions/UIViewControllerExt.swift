@@ -8,7 +8,9 @@
 
 import UIKit
 
+//transitions imitating navigation controller style
 extension UIViewController {
+    
     func presentDetail(_ viewControllerToPresent: UIViewController) {
         let transition = CATransition()
         transition.duration = 0.3
@@ -28,6 +30,4 @@ extension UIViewController {
         
         dismiss(animated: false, completion: nil)
     }
-    
-    
 }

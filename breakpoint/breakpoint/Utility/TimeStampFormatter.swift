@@ -8,7 +8,7 @@
 
 import Foundation
 
-// Date and time formatting extracted
+// Date and time formatting, depending on how old the message is
 class TimeStampFormatter {
     
     static let instance = TimeStampFormatter()
