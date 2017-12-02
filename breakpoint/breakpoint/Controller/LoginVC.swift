@@ -23,12 +23,12 @@ class LoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         emailField.delegate = self
         passwordField.delegate = self
     }
     
-    func fadeOutLabel(withText text: String) {
+    //error label animation
+    func presentFadeOutLabel(withText text: String) {
         signInButton.isEnabled = false
         errorLabel.text = text
         UIView.animate(withDuration: 2, animations: {
@@ -44,8 +44,6 @@ class LoginVC: UIViewController {
     }
 
     @IBAction func signInButtonPressed(_ sender: Any) {
-        
-
         if emailField.text != "" && passwordField.text != "" {
             AuthService.instance.loginUser(withEmail: emailField.text!, andPassword: passwordField.text!, loginComplete: { (success, loginError) in
                 if success {
@@ -53,11 +51,11 @@ class LoginVC: UIViewController {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     print(String(describing: loginError?.localizedDescription))
-                    self.fadeOutLabel(withText: (loginError?.localizedDescription)!)
+                    self.presentFadeOutLabel(withText: (loginError?.localizedDescription)!)
                 }
             })
         } else {
-            fadeOutLabel(withText: "fill out all the info")
+            presentFadeOutLabel(withText: "fill out all the info")
         }
     }
     

@@ -38,7 +38,8 @@ class GroupFeedVC: UIViewController {
         sendButtonView.bindToKeyboard()
         tableView.delegate = self
         tableView.dataSource = self
-        avatarsDownloaded = false
+        NotificationCenter.default.addObserver(self, selector: #selector(GroupFeedVC.addNewMessage(_:)), name: NOTIF_NEW_GROUP_MESSAGE, object: nil)
+        //downloads avatars once, because it's a fixed, small set of users
         getUserAvatars()
     }
     
@@ -51,23 +52,31 @@ class GroupFeedVC: UIViewController {
         getMessages()
     }
     
+    @objc func addNewMessage(_ notif: Notification) {
+        DataService.instance.getAllMessagesFor(desiredGroup: group!) { (returnedMessages) in
+            //let returnedMessages = returnedMessages.
+            let newMessage = returnedMessages.last
+            self.groupMessages.append(newMessage!)
+            self.tableView.reloadData()
+            self.scrollToBottom()
+        }
+    }
+    
     func getMessages() {
         noMessagesLabel.isHidden = true
         spinner.isHidden = false
         spinner.startAnimating()
         loadingLabel.isHidden = false
-        DataService.instance.REF_GROUPS.observe(.value) { (snapShot) in
-            DataService.instance.getAllMessagesFor(desiredGroup: self.group!, handler: { (returnedGroupMessages) in
-                self.groupMessages = returnedGroupMessages
-                if self.avatarsDownloaded {
-                    self.spinner.stopAnimating()
-                    self.spinner.isHidden = true
-                    self.loadingLabel.isHidden = true
-                    self.tableView.reloadData()
-                    self.scrollToBottom()
-                }
-            })
-        }
+        DataService.instance.getAllMessagesFor(desiredGroup: self.group!, handler: { (returnedGroupMessages) in
+            self.groupMessages = returnedGroupMessages
+            if self.avatarsDownloaded {
+                self.spinner.stopAnimating()
+                self.spinner.isHidden = true
+                self.loadingLabel.isHidden = true
+                self.tableView.reloadData()
+                self.scrollToBottom()
+            }
+        })
     }
     
     func scrollToBottom() {
@@ -79,6 +88,7 @@ class GroupFeedVC: UIViewController {
     }
     
     func getUserAvatars() {
+        avatarsDownloaded = false
         spinner.isHidden = false
         spinner.startAnimating()
         loadingLabel.isHidden = false
@@ -105,6 +115,7 @@ class GroupFeedVC: UIViewController {
                     self.messageTextField.text = ""
                     self.messageTextField.isEnabled = true
                     self.sendButton.isEnabled = true
+                    NotificationCenter.default.post(name: NOTIF_NEW_GROUP_MESSAGE, object: nil)
                 }
             })
         }
@@ -125,6 +136,7 @@ extension GroupFeedVC: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "groupFeedCell", for: indexPath) as? GroupFeedCell else { return UITableViewCell() }
         let message = groupMessages[indexPath.row]
         DataService.instance.getUsername(forUID: message.senderId) { (email) in
+            //drops the '@emailservice' part of username
             let emailStr = email.components(separatedBy: "@")
             let userName = emailStr[0]
             cell.configureCell(profileImage: self.groupAvatars["\(message.senderId)"]!, email: userName, content: message.content)

@@ -24,8 +24,8 @@ class MeVC: UIViewController {
     
     @IBOutlet weak var myMsgsToggle: UISegmentedControl!
     
-    var myGroups = [Group]()
     var myFeedMessages = [String]()
+    var myGroups = [Group]()
     var myGroupTitles = [String]()
     var myGroupMessages = [[String]]()
     
@@ -33,46 +33,64 @@ class MeVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
-        setupView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.emailLbl.text = Auth.auth().currentUser?.email
         setupView()
         getMyMessages()
     }
     
+    func addObservers() {
+        //for when the user changes the status or the avatar
+        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MeVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
+    }
+    
     @objc func userStatusDidChange(_ notif: Notification) {
-        setupView()
+        statusLabel.text = AuthService.status
+        setupButtonText()
     }
     
     @objc func userAvatarDidChange(_ notif: Notification) {
-        setupView()
+        profileImage.image = AuthService.avatar
     }
     
     func setupView() {
+        emailLbl.text = Auth.auth().currentUser?.email
         statusLabel.text = AuthService.status
         profileImage.image = AuthService.avatar
         setupButtonText()
     }
     
-    func getMyMessages() {
-            if self.myMsgsToggle.selectedSegmentIndex == 0 {
-                self.getMyFeedMessages()
-            } else if self.myMsgsToggle.selectedSegmentIndex == 1 {
-                self.getMyGroupMessages()
-            }
+    //status button text changed based on whether the status has been set
+    func setupButtonText() {
+        if self.statusLabel.text == "" {
+            setStatusButton.setTitle("set status", for: .normal)
+        } else {
+            setStatusButton.setTitle("change status", for: .normal)
+        }
     }
     
-    func clearArrays() {
+    //clears everything when logging out
+    func clearUserInfo() {
         myFeedMessages = []
         myGroups = []
         myGroupTitles = []
         myGroupMessages = []
         tableView.reloadData()
+        emailLbl.text = ""
+        statusLabel.text = ""
+        profileImage.image = UIImage(named: "defaultProfileImage")
+    }
+    
+    //downloads user's messages from the Main Feed or from the Group Feeds
+    func getMyMessages() {
+        if myMsgsToggle.selectedSegmentIndex == 0 {
+            getMyFeedMessages()
+        } else if myMsgsToggle.selectedSegmentIndex == 1 {
+            getMyGroupMessages()
+        }
     }
     
     func getMyFeedMessages() {
@@ -103,28 +121,16 @@ class MeVC: UIViewController {
         }
     }
     
-    func setupButtonText() {
-        if self.statusLabel.text == "" {
-            setStatusButton.setTitle("set status", for: .normal)
-        } else {
-            setStatusButton.setTitle("change status", for: .normal)
-        }
-    }
-    
     @IBAction func myMsgsToggleTapped(_ sender: UISegmentedControl) {
         getMyMessages()
     }
-    
     
     @IBAction func signOutButtonPressed(_ sender: Any) {
         let logoutPopup = UIAlertController(title: "logout?", message: "are you sure?", preferredStyle: .actionSheet)
         let logoutAction = UIAlertAction(title: "logout", style: .destructive) { (buttonTapped) in
             do {
                try Auth.auth().signOut()
-                self.clearArrays()
-                self.emailLbl.text = ""
-                self.statusLabel.text = ""
-                self.profileImage.image = UIImage(named: "defaultProfileImage")
+                self.clearUserInfo()
                 let authVC = self.storyboard?.instantiateViewController(withIdentifier: "AuthVC") as? AuthVC
                 self.present(authVC!, animated: true, completion: nil)
             } catch {
@@ -134,8 +140,6 @@ class MeVC: UIViewController {
         logoutPopup.addAction(logoutAction)
         logoutPopup.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: nil))
         present(logoutPopup, animated: true, completion: nil)
-        AuthService.avatar = UIImage(named: "defaultProfileImage")
-        AuthService.status = ""
     }
     
     @IBAction func setStatusButtonPressed(_ sender: Any) {
@@ -149,7 +153,6 @@ class MeVC: UIViewController {
         addPhotoVC.modalPresentationStyle = .custom
         present(addPhotoVC, animated: true, completion: nil)
     }
-    
 }
 
 extension MeVC: UITableViewDelegate, UITableViewDataSource {
@@ -164,6 +167,7 @@ extension MeVC: UITableViewDelegate, UITableViewDataSource {
         return numOfSections
     }
     
+    //header style when displaying group sections
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerTitle = view as?UITableViewHeaderFooterView {
             headerTitle.textLabel?.textColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)

@@ -8,7 +8,7 @@
 
 import UIKit
 
-//transitions imitating navigation controller style
+//transition animations imitating navigation controller style
 extension UIViewController {
     
     func presentDetail(_ viewControllerToPresent: UIViewController) {

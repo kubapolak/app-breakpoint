@@ -143,5 +143,4 @@ extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension CreateGroupsVC: UITextFieldDelegate {
-    
 }

@@ -21,22 +21,20 @@ class GroupsVC: UIViewController {
         groupsTableView.dataSource = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getGroups()
+    }
+    
     func getGroups() {
         DispatchQueue.global(qos: .userInitiated).async {
-            DataService.instance.REF_GROUPS.observe(.value) { (snapshot) in
-                DataService.instance.getAllGroups { (returnedGroupsArray) in
-                    self.groupsArray = returnedGroupsArray
-                    DispatchQueue.main.async {
-                        self.groupsTableView.reloadData()
-                    }
+            DataService.instance.getAllGroups { (returnedGroupsArray) in
+                self.groupsArray = returnedGroupsArray
+                DispatchQueue.main.async {
+                    self.groupsTableView.reloadData()
                 }
             }
         }
-    }
-    
-    override func viewWillAppear (_ animated: Bool) {
-        super.viewWillAppear(animated)
-        getGroups()
     }
 }
 

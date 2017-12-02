@@ -21,13 +21,14 @@ class AuthVC: UIViewController, GIDSignInUIDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //dismisses the view after firebase login/registration
         if Auth.auth().currentUser != nil {
             dismiss(animated: true, completion: nil)
         }
     }
     
+    //dismisses the view after facebook/google login
     @objc func userDidLogin(_ notif: Notification) {
-        print("DONE")
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -45,10 +46,8 @@ class AuthVC: UIViewController, GIDSignInUIDelegate {
         present(loginVC!, animated: true, completion: nil)
     }
     
-    
     @IBAction func signUpLocalPressed(_ sender: Any) {
         let signUpVC = storyboard?.instantiateViewController(withIdentifier: "SignUpVC")
         present(signUpVC!, animated: true, completion: nil)
     }
-    
 }

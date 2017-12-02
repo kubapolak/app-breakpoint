@@ -47,6 +47,7 @@ class FeedVC: UIViewController {
     }
     
     func addObservers() {
+        //for when the user changes the status or the avatar
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userStatusDidChange(_:)), name: NOTIF_STATUS_DID_CHANGE, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FeedVC.userAvatarDidChange(_:)), name: NOTIF_AVATAR_DID_CHANGE, object: nil)
     }
@@ -73,7 +74,6 @@ class FeedVC: UIViewController {
     
     func addPullToRefresh() {
         tableView.refreshControl = refreshControl
-        
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         refreshControl.tintColor = #colorLiteral(red: 0.8133803456, green: 1, blue: 0.9995977238, alpha: 1)
     }
@@ -83,19 +83,12 @@ class FeedVC: UIViewController {
         getMessages()
     }
     
-    func clearUserData() {
-        messageArray = []
-        usernameDict = [:]
-        idArray = []
-        feedAvatars = [:]
-        statusDict = [:]
-    }
-    
     func getUserIds(handler: @escaping (_ done: Bool) -> ()) {
         tempIdArray = []
         for message in self.messageArray {
             let id = message.senderId
             if !self.idArray.contains(id) {
+                //adding to idArray to be stored as an active feed user and in tempIdArray to get user's info
                 self.idArray.append(id)
                 self.tempIdArray.append(id)
             }
@@ -104,6 +97,7 @@ class FeedVC: UIViewController {
     }
     
     func getUserData(handler: @escaping (_ done: Bool) -> ()) {
+        //working on tempIdArray, only getting the info for the IDs that are not configured
         for id in tempIdArray {
             DataService.instance.getStatus(forUser: id, handler: { (status) in
                 self.statusDict["\(id)"] = status
@@ -130,6 +124,7 @@ class FeedVC: UIViewController {
                 self.getUserIds(handler: { (finished) in
                     if finished {
                         if self.idArray.count == self.usernameDict.count {
+                            //all users already configured
                             self.actSpinner.stopAnimating()
                             self.actSpinner.isHidden = true
                             self.loadingLabel.isHidden = true
@@ -138,6 +133,7 @@ class FeedVC: UIViewController {
                                 self.tableView.refreshControl?.endRefreshing()
                             }
                         } else {
+                            //new users, need to download data
                             self.getUserData(handler: { (finished) in
                                 if finished {
                                 self.actSpinner.stopAnimating()
@@ -154,6 +150,7 @@ class FeedVC: UIViewController {
                 })
                 }
             } else {
+                //no messages
                 self.actSpinner.stopAnimating()
                 self.actSpinner.isHidden = true
                 self.loadingLabel.isHidden = true
@@ -188,6 +185,7 @@ extension FeedVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.configureCell(profileImage: tempImage!, email: email!, content: content, status: status!, time: time)
         
+        //checks if the avatar for an id is already downloaded
         if let cacheAvatar = feedAvatars[id] {
             cell.profileImg.image = cacheAvatar
         } else {
