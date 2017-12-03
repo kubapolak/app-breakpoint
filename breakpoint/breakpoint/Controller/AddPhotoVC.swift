@@ -28,13 +28,13 @@ class AddPhotoVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker.delegate = self
-        uploadingLabel.isHidden = true
-        progressBar.isHidden = true
-        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupView()
+        uploadingLabel.isHidden = true
+        progressBar.isHidden = true
     }
     
     func setupView() {
@@ -61,6 +61,7 @@ class AddPhotoVC: UIViewController {
         AuthService.avatar = tempImg
     }
     
+    //uploading the avatar to Firebase Storage
     func uploadImageToFirebase(_ data: Data, userID: String) {
         let storageRef = Storage.storage().reference(withPath: "userAvatars/\(userID).jpg")
         let uploadMetadata = StorageMetadata()
@@ -69,7 +70,6 @@ class AddPhotoVC: UIViewController {
             if error != nil {
                 print("error while uploading image: \(String(describing: error?.localizedDescription))")
             } else {
-                print("SUCCESS!, metadata: \(String(describing: metadata))")
                 NotificationCenter.default.post(name: NOTIF_AVATAR_DID_CHANGE, object: nil)
                 self.dismiss(animated: true, completion: nil)
             }

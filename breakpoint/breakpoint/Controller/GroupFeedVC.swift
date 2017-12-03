@@ -35,6 +35,7 @@ class GroupFeedVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.bindToKeyboard()
         sendButtonView.bindToKeyboard()
         tableView.delegate = self
         tableView.dataSource = self

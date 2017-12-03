@@ -22,9 +22,7 @@ class UpdateUserStatusVC: UIViewController {
     }
     
     func setupView() {
-        
         DataService.instance.getStatus(forUser: (Auth.auth().currentUser?.uid)!) { (userStatus) in
-            
             if userStatus == "casual" {
             self.statusSwitch.selectedSegmentIndex = 0
             } else if userStatus == "nerd" {
@@ -42,7 +40,6 @@ class UpdateUserStatusVC: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
-  
     @IBAction func confirmButtonTapped(_ sender: Any) {
         var updatedStatus = String()
         if statusSwitch.selectedSegmentIndex == 0 {

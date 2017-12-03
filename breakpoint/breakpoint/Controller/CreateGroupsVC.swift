@@ -43,31 +43,23 @@ class CreateGroupsVC: UIViewController {
         chosenUserArray = []
     }
     
-    func clearArrays() {
-        emailArray = []
-        idArray = []
-        avatarArray = []
-    }
-    
     @objc func textFieldDidChange() {
-        clearArrays()
-        tableView.reloadData()
-        if emailSearchTextField.text == "" {
-            tableView.reloadData()
-        } else {
-            searchForUsers()
-            }
+        searchForUsers()
     }
     
     func searchForUsers() {
         let emailSearch = emailSearchTextField.text!
+        DispatchQueue.global(qos: .utility).async {
             DataService.instance.getEmail(forSearchQuery: emailSearch, handler: { (returnedEmailArray) in
-                    self.emailArray = returnedEmailArray
+                self.emailArray = returnedEmailArray
                 DataService.instance.getIds(forUserNames: self.emailArray, handler: { (returnedIds) in
                     self.idArray = returnedIds
+                    DispatchQueue.main.async {
                         self.tableView.reloadData()
+                    }
                 })
             })
+        }
     }
     
     @IBAction func doneButtonPressed(_ sender: Any) {
@@ -75,7 +67,6 @@ class CreateGroupsVC: UIViewController {
             DataService.instance.getIds(forUserNames: chosenUserArray, handler: { (idsArray) in
                 var userIds = idsArray
                 userIds.append((Auth.auth().currentUser?.uid)!)
-                
                 DataService.instance.createGroup(withTitle: self.titleTextField.text!, andDescription: self.descriptionTextField.text!, forUserIds: userIds, handler: { (groupCreated) in
                     if groupCreated {
                         self.dismiss(animated: true, completion: nil)
@@ -92,16 +83,16 @@ class CreateGroupsVC: UIViewController {
     }
 }
 
-
 extension CreateGroupsVC: UITableViewDelegate, UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("")
-
         return emailArray.count
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "userCell") as? UserCell else { return UITableViewCell() }
         var selected = Bool()
